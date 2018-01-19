@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "1066274588986",
+    "firebase_url": "https://matchpoint-f7ddf.firebaseio.com",
+    "project_id": "matchpoint-f7ddf",
+    "storage_bucket": "matchpoint-f7ddf.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1066274588986:android:b875c278343d2ac8",
+        "android_client_info": {
+          "package_name": "saar.roy.matchpoint"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1066274588986-11ek18n95k7cv5ug40immvdf7v164hmn.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "saar.roy.matchpoint",
+            "certificate_hash": "8fcb52347ae0e225549666dae8c3c092bd679510"
+          }
+        },
+        {
+          "client_id": "1066274588986-foc8nqs664i6v0cu8c7ch16gv4jpm8mq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBadyweaBX1L-EUTvyigDu7HErK20ouiY8"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1066274588986-foc8nqs664i6v0cu8c7ch16gv4jpm8mq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
