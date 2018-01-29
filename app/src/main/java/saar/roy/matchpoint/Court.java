@@ -1,6 +1,7 @@
 package saar.roy.matchpoint;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 /**
  * Created by Eidan on 1/19/2018.
@@ -9,19 +10,28 @@ import com.google.android.gms.maps.model.LatLng;
 class Court {
     private double latitude;
     private double longitude;
+    //private LatLng position;
     private String name;
     private String description;
+    private double price;
 
-    public Court(String name, String description, LatLng latLng) {
+    public Court(String description, String name, double latitude, double longitude,double price) {
         this.name = name;
         this.description = description;
-        this.latitude = latLng.latitude;
-        this.longitude = latLng.longitude;
+        //this.position = position;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.price = price;
     }
 
-    public LatLng getPosition() {
-        return new LatLng(latitude,longitude);
+    public Court() {
     }
+
+    // public double getLatitude(){ return this.latitude; }
+
+    // public double getLongitude(){ return this.longitude; }
+
+    public LatLng getPosition() { return new LatLng(latitude,longitude); }
 
     public String getName() {
         return name;
@@ -30,4 +40,14 @@ class Court {
     public String getDescription() {
         return description;
     }
+
+    public double getPrice() { return price; }
+
+    MarkerOptions toMarkerOptions() {
+        return new MarkerOptions()
+                .position(getPosition())
+                .title(getName())
+                .snippet(getDescription() + " - " + getPrice() + "₪");
+    }
+
 }
