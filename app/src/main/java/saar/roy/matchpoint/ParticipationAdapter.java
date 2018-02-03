@@ -31,12 +31,13 @@ public class ParticipationAdapter extends ArrayAdapter<MatchParticipation> {
         ImageView ivConfirmed = (ImageView) convertView.findViewById(R.id.ivConfirmed);
         tvName.setText(participation.getUser().getName());
         if (participation.isConfirmed())
-            ivConfirmed.setBackgroundResource(R.drawable.confirmed);
+            ivConfirmed.setImageResource(R.drawable.confirmed);
         else
-            ivConfirmed.setBackgroundResource(R.drawable.unconfirmed);
+            ivConfirmed.setImageResource(R.drawable.unconfirmed);
+
         switch (participation.getTeam()) {
             case TEAM1:
-                tvName.setTextColor(getContext().getResources().getColor(R.color.colorPrimary));
+                tvName.setTextColor(getContext().getResources().getColor(R.color.textOnS));
                 break;
             case TEAM2:
                 tvName.setTextColor(getContext().getResources().getColor(R.color.colorAccent));

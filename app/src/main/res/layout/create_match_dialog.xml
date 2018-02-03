@@ -6,10 +6,60 @@
     android:orientation="vertical"
     android:textDirection="rtl">
 
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/tvCourtName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="15dp"
+        android:fontFamily="@font/assistant_bold"
+        android:text="קאנטרי הרצליה"
+        android:textColor="@color/textOnP"
+        android:textSize="30sp" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/tvCourtDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="-10dp"
+        android:fontFamily="@font/assistant"
+        android:text="קאנטרי הרצליה"
+        android:textColor="@color/textOnP"
+        android:textSize="22sp" />
+
+    <View
+        android:id="@+id/horizontalSep1"
+        android:layout_width="300dp"
+        android:layout_height="1dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10dp"
+        android:alpha="0.5"
+        android:background="@android:color/darker_gray" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/tvAddFriends"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="15dp"
+        android:fontFamily="@font/assistant_semibold"
+        android:text="הזמן חברים"
+        android:textColor="@color/textOnP"
+        android:textSize="24sp" />
+
+    <SearchView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="15dp"
+        android:layout_marginTop="5dp"
+        android:queryHint="חפש חברים"
+        android:textDirection="inherit" />
+
     <ListView
         android:id="@+id/lvParticipations"
         android:layout_width="match_parent"
-        android:layout_height="194dp" />
+        android:layout_height="194dp"
+        android:layout_marginBottom="15dp" />
 
     <LinearLayout
         android:layout_width="300dp"
@@ -17,7 +67,7 @@
         android:layout_gravity="center_horizontal"
         android:orientation="horizontal">
 
-        <Button
+        <android.support.v7.widget.AppCompatButton
             android:id="@+id/cancelBtn"
             android:layout_width="120dp"
             android:layout_height="wrap_content"
@@ -28,7 +78,7 @@
             android:text="בטל"
             android:textColor="@color/textOnP" />
 
-        <Button
+        <android.support.v7.widget.AppCompatButton
             android:id="@+id/submitBtn"
             android:layout_width="120dp"
             android:layout_height="wrap_content"

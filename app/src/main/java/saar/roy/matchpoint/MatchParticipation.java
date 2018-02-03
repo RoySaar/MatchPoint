@@ -9,6 +9,12 @@ class MatchParticipation {
     private boolean confirmed;
     private Team team;
 
+    public MatchParticipation(User user, Team team) {
+        this.user = user;
+        this.team = team;
+        this.confirmed = true;
+    }
+
     public User getUser() {
         return user;
     }

@@ -55,6 +55,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
             @Override
             public void onCallback(List<Court> courts) {
                 for (Court court : courts) {
+                    // Add a marker for each court
                     mMap.addMarker(court.toMarkerOptions(MapActivity.this));
                 }
             }
@@ -62,8 +63,10 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
          services.getCourts(callback);
          mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
              @Override
+             // Show the create match dialog
              public void onInfoWindowClick(Marker marker) {
                  CreateMatchDialogFragment matchDialogFragment = CreateMatchDialogFragment.newInstance();
+                 matchDialogFragment.setCourt(marker.getTitle(),marker.getSnippet());
                  FragmentManager fm = getSupportFragmentManager();
                  matchDialogFragment.show(fm,"Dialog");
              }
