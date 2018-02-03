@@ -1,13 +1,16 @@
 package saar.roy.matchpoint;
 
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.support.v4.app.ActivityCompat;
+import android.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -17,6 +20,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.List;
@@ -47,15 +51,24 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
      @Override
      public void onMapReady(GoogleMap googleMap) {
          mMap = googleMap;
-        Callback callback =  new Callback() {
+        Callback callback =  new Callback<List<Court>>() {
             @Override
-            public void onCallback(Object value) {
-                for (Court court : value){
-
+            public void onCallback(List<Court> courts) {
+                for (Court court : courts) {
+                    mMap.addMarker(court.toMarkerOptions(MapActivity.this));
                 }
             }
          };
          services.getCourts(callback);
+         mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+             @Override
+             public void onInfoWindowClick(Marker marker) {
+                 CreateMatchDialogFragment matchDialogFragment = CreateMatchDialogFragment.newInstance();
+                 FragmentManager fm = getSupportFragmentManager();
+                 matchDialogFragment.show(fm,"Dialog");
+             }
+         });
+         moveCameraToCurrentLocation();
      }
 
     public void moveCameraToCurrentLocation() {

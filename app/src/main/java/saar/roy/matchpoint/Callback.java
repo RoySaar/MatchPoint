@@ -7,5 +7,5 @@ import java.util.List;
  */
 
 public interface Callback <T> {
-    void onCallback(List<Court> courts);
+    void onCallback(List<Court> list);
 }

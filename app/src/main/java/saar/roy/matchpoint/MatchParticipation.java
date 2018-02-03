@@ -8,4 +8,16 @@ class MatchParticipation {
     private User user;
     private boolean confirmed;
     private Team team;
+
+    public User getUser() {
+        return user;
+    }
+
+    public Team getTeam() {
+        return team;
+    }
+
+    public boolean isConfirmed() {
+        return confirmed;
+    }
 }

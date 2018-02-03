@@ -14,4 +14,9 @@ class User {
     private UserStatistics statistics;
     private LatLng currentLocation;
     boolean searchingForMatch;
+    private String name;
+
+    public String getName() {
+        return name;
+    }
 }

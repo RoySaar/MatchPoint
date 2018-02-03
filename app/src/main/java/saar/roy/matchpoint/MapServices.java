@@ -45,11 +45,6 @@ public class MapServices implements Services {
                 });
     };
 
-    @Override
-    public void getCourts() {
-
-    }
-
     public void saveMatch(Match match) {
 
     };
