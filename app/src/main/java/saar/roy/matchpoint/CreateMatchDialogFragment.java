@@ -34,6 +34,7 @@ public class CreateMatchDialogFragment extends DialogFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setStyle(STYLE_NO_TITLE, 0);
     }
 
     public void setCourt(String courtName,String courtDescription) {
@@ -44,6 +45,7 @@ public class CreateMatchDialogFragment extends DialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         View v = inflater.inflate(R.layout.create_match_dialog, null);
+        //getDialog().setTitle("הזמנת מגרש");
         ArrayList<MatchParticipation> list = new ArrayList<>();
         list.add(new MatchParticipation(new User("ניסים גרמה"),Team.TEAM2));
         ParticipationAdapter participationAdapter = new ParticipationAdapter(getContext(),list);
