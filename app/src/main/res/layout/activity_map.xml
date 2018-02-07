@@ -32,6 +32,6 @@
         app:itemBackground="@color/colorPrimary"
         app:itemIconTint="@color/textOnS"
         app:itemTextColor="@color/textOnS"
-        app:menu="@menu/bottom_navigation_main" />
+        app:menu="@menu/navigation" />
 
 </LinearLayout>

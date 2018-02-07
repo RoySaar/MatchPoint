@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fontFamily="@font/assistant_bold"
-        android:text="קאנטרי הרצליה"
+        android:text="@string/court_name_placeholder"
         android:textColor="@color/textOnP"
         android:textSize="30sp" />
 
@@ -21,7 +21,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fontFamily="@font/assistant"
-        android:text="קאנטרי הרצליה"
+        android:text="@string/court_desc_placeholder"
         android:textColor="@color/textOnP"
         android:textSize="22sp" />
 
@@ -40,11 +40,12 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
         android:fontFamily="@font/assistant_semibold"
-        android:text="הזמן חברים"
+        android:text="@string/court_title_placholder"
         android:textColor="@color/textOnP"
         android:textSize="24sp" />
 
     <SearchView
+        android:id="@+id/svFriends"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="15dp"
@@ -72,7 +73,7 @@
             android:layout_weight="1"
             android:backgroundTint="@color/colorPrimary"
             android:fontFamily="@font/assistant_semibold"
-            android:text="בטל"
+            android:text="@string/cancel"
             android:textColor="@color/textOnP" />
 
         <android.support.v7.widget.AppCompatButton
@@ -83,7 +84,7 @@
             android:layout_weight="1"
             android:backgroundTint="@color/colorPrimary"
             android:fontFamily="@font/assistant_semibold"
-            android:text="הזמן"
+            android:text="@string/order"
             android:textColor="@color/textOnP" />
 
     </LinearLayout>

@@ -5,7 +5,7 @@
     <color name="colorPrimaryDark">#99aa00</color>
     <color name="colorAccent">#aa00ff</color>
     <color name="colorAccentLight">#e254ff</color>
-    <color name="colorAccentDark">#e254ff</color>
+    <color name="colorAccentDark">#7200ca</color>
     <color name="textOnP">#000000</color>
     <color name="textOnS">#ffffff</color>
 </resources>

@@ -4,6 +4,14 @@
     <string name="title_activity_login">Sign in</string>
 
     <!-- Strings related to login -->
+    <string name="email_adress">Email Address</string>
+    <string name="password">Password</string>
+    <string name="login">LOGIN</string>
+    <string name="dont_have_an_account_yet">Don\'t have an account yet? Sign up.</string>
+    <string name="forgot_your_password">Forgot your password?</string>
+    <string name="remember_me">Remember me</string>
+    <string name="guest">Guest</string>
+    <string name="app_logo">App Logo</string>
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password (optional)</string>
     <string name="action_sign_in">Sign in or register</string>
@@ -12,13 +20,34 @@
     <string name="error_invalid_password">This password is too short</string>
     <string name="error_incorrect_password">This password is incorrect</string>
     <string name="error_field_required">This field is required</string>
+    <string name="auth_failed">Authentication failed!</string>
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
-    <string name="auth_failed">Authentication failed!</string>
+
+    <!-- Strings related to create match dialog -->
+    <string name="court_name_placeholder">שם המגרש</string>
+    <string name="court_desc_placeholder">תיאור המגרש</string>
+    <string name="search_friends">חפש חברים</string>
+    <string name="court_title_placholder">הזמן חברים</string>
+    <string name="cancel">בטל</string>
+    <string name="order">הזמן</string>
+
+    <!-- String related to map -->
+    <string name="search_courts">חפש מגרשים</string>
+
+    <!-- Strings related to dashboard -->
+    <string name="last_matches">משחקים אחרונים</string>
+    <string name="friends">חברים</string>
+    <string name="username_placeholder">שם משתמש</string>
+    <string name="user_info_placeholder">18W-0L</string>
+
+    <!-- Activity titles -->
     <string name="title_activity_main">Map</string>
     <string name="title_home">Home</string>
     <string name="title_map">Map</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
+    <string name="profile_picture">Profile Picture</string>
+
 </resources>

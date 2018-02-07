@@ -8,112 +8,153 @@
     android:background="@color/colorPrimary"
     tools:context="saar.roy.matchpoint.LoginActivity">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="16dp"
-        android:background="@android:color/background_light"
-        android:backgroundTint="@color/colorPrimary"
-        android:orientation="vertical"
-        android:paddingTop="100dp"
-        android:weightSum="1"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintStart_toEndOf="parent"
-        app:layout_constraintVertical_chainStyle="spread"
-        tools:context="saar.roy.matchpoint.LoginActivity"
-        tools:layout_editor_absoluteY="10dp">
+    <ImageView
+        android:id="@+id/ivLogo"
+        android:layout_width="wrap_content"
+        android:layout_height="120dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="80dp"
+        android:contentDescription="@string/app_logo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/logo_w_25" />
 
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/tipEmail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="45dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ivLogo">
 
-        <ImageView
-            android:id="@+id/imageView2"
-            android:layout_width="wrap_content"
-            android:layout_height="120dp"
-            app:srcCompat="@drawable/logo_w_25" />
-
-        <EditText
-            android:id="@+id/textEmail"
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/tvEmail"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="30dp"
             android:backgroundTint="@color/textOnS"
             android:fontFamily="@font/assistant"
-            android:hint="Email"
+            android:hint="@string/email_adress"
             android:inputType="textEmailAddress"
-            android:textColor="@color/textOnS"
             android:textColorHint="@color/textOnS" />
+    </android.support.design.widget.TextInputLayout>
 
-        <EditText
-            android:id="@+id/textPassword"
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/tipPassword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tipEmail">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/tvPassword"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="25dp"
-            android:backgroundTint="@color/common_google_signin_btn_text_dark_default"
-            android:ems="10"
+            android:backgroundTint="@color/textOnS"
             android:fontFamily="@font/assistant"
-            android:hint="Password"
+            android:hint="@string/password"
             android:inputType="textPassword"
-            android:textColor="@color/common_google_signin_btn_text_dark_default"
-            android:textColorHint="@color/common_google_signin_btn_text_dark_default" />
+            android:paddingTop="25dp"
+            android:textColorHint="@color/textOnS" />
+    </android.support.design.widget.TextInputLayout>
 
-        <CheckBox
-            android:id="@+id/rememberMe"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:buttonTint="@color/common_google_signin_btn_text_dark_default"
-            android:checked="false"
-            android:cursorVisible="false"
-            android:fontFamily="@font/assistant"
-            android:text="Remember me"
-            android:textColor="@color/common_google_signin_btn_text_dark_default"
-            android:textColorLink="@color/common_google_signin_btn_text_dark_default" />
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="30dp"
-            android:orientation="vertical">
+    <CheckBox
+        android:id="@+id/cbRememberMe"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="40dp"
+        android:layout_marginTop="4dp"
+        android:buttonTint="@color/textOnS"
+        android:checked="false"
+        android:fontFamily="@font/assistant"
+        android:text="@string/remember_me"
+        android:textColor="@color/common_google_signin_btn_text_dark_default"
+        android:textColorLink="@color/textOnS"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.136"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tipPassword" />
 
-            <Button
-                android:id="@+id/signInButton"
-                android:layout_width="307dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:backgroundTint="@android:color/background_light"
-                android:focusableInTouchMode="false"
-                android:fontFamily="@font/assistant"
-                android:nestedScrollingEnabled="false"
-                android:onClick="OnSigninButtonClick"
-                android:singleLine="false"
-                android:text="LOGIN"
-                android:textColor="#afb42b" />
+    <Button
+        android:id="@+id/btnSignIn"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="20dp"
+        android:backgroundTint="@android:color/background_light"
+        android:focusableInTouchMode="false"
+        android:fontFamily="@font/assistant"
+        android:nestedScrollingEnabled="false"
+        android:onClick="OnSigninButtonClick"
+        android:text="@string/login"
+        android:textColor="@color/colorPrimaryDark"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.508"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cbRememberMe" />
 
-            <TextView
-                android:id="@+id/signUpText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:fontFamily="@font/assistant"
-                android:text="Don't have an account yet? Sign up."
-                android:textColor="@android:color/white" />
+    <Button
+        android:id="@+id/btnSignInAnon"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:backgroundTint="@android:color/background_light"
+        android:focusableInTouchMode="false"
+        android:fontFamily="@font/assistant"
+        android:nestedScrollingEnabled="false"
+        android:onClick="OnGuestSigninButtonClick"
+        android:text="@string/guest"
+        android:textColor="@color/colorPrimaryDark"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnSignIn" />
 
-            <TextView
-                android:id="@+id/textView4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_weight="0.09"
-                android:fontFamily="@font/assistant"
-                android:text="Forgot your password?"
-                android:textColor="@color/common_google_signin_btn_text_dark_default" />
+    <TextView
+        android:id="@+id/tvSignUp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:fontFamily="@font/assistant"
+        android:text="@string/dont_have_an_account_yet"
+        android:textColor="@android:color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnSignInAnon" />
 
-        </LinearLayout>
+    <TextView
+        android:id="@+id/tvForgotPassword"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_weight="0.09"
+        android:fontFamily="@font/assistant"
+        android:text="@string/forgot_your_password"
+        android:textColor="@color/common_google_signin_btn_text_dark_default"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvSignUp" />
 
-    </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

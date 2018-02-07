@@ -12,6 +12,15 @@
         <item name="android:windowBackground">@drawable/background_splash</item>
     </style>
 
+
+    <style name="MyTheme.ActionBarStyle" parent="@android:style/Widget.Holo.Light.ActionBar">
+        <item name="android:titleTextStyle">@style/MyTheme.ActionBar.TitleTextStyle</item>
+    </style>
+
+    <style name="MyTheme.ActionBar.TitleTextStyle" parent="@android:style/TextAppearance.Holo.Widget.ActionBar.Title">
+        <item name="android:textColor">@color/textOnP</item>
+    </style>
+
     <style name = "NoActionBar" parent = "@android:style/Theme.Holo.Light">
         <item name = "android:windowActionBar">false</item>
         <item name = "android:windowNoTitle">true</item>

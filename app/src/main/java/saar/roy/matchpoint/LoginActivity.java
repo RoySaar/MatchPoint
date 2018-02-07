@@ -62,9 +62,9 @@ public class LoginActivity extends AppCompatActivity {
         String email = pref.getString(PREF_EMAIL, "");
         String password = pref.getString(PREF_PASSWORD, "");
         if (!(email.equals(""))) {
-            ((EditText)findViewById(R.id.textEmail)).setText(email);
-            ((EditText)findViewById(R.id.textPassword)).setText(password);
-            ((CheckBox)findViewById(R.id.rememberMe)).setChecked(true);
+            ((EditText)findViewById(R.id.tvEmail)).setText(email);
+            ((EditText)findViewById(R.id.tvPassword)).setText(password);
+            ((CheckBox)findViewById(R.id.cbRememberMe)).setChecked(true);
         }
     }
 
@@ -120,7 +120,7 @@ public class LoginActivity extends AppCompatActivity {
                         }
                         else {
                             String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-                            // Start dashboard activity
+                            // Start main activity
                             startActivity(new Intent(LoginActivity.this,MainActivity.class));
                         }
                     }
@@ -128,8 +128,8 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void OnSignupButtonClick(View v) {
-        String email = ((EditText)findViewById(R.id.textEmail)).getText().toString().trim();
-        String password = ((EditText)findViewById(R.id.textPassword)).getText().toString().trim();
+        String email = ((EditText)findViewById(R.id.tvEmail)).getText().toString().trim();
+        String password = ((EditText)findViewById(R.id.tvPassword)).getText().toString().trim();
         Verification verification = authServices.verifyEmailAndPassword(email,password);
         if (verification == Verification.VALID)
             // Valid credentials, sign up
@@ -153,8 +153,8 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void OnSigninButtonClick(View v) {
-        String email = ((EditText)findViewById(R.id.textEmail)).getText().toString().trim();
-        String password = ((EditText)findViewById(R.id.textPassword)).getText().toString().trim();
+        String email = ((EditText)findViewById(R.id.tvEmail)).getText().toString().trim();
+        String password = ((EditText)findViewById(R.id.tvPassword)).getText().toString().trim();
         Verification verification = authServices.verifyEmailAndPassword(email,password);
         if (verification == Verification.EITHER_IS_NULL)
             // Email or password are empty
@@ -162,11 +162,33 @@ public class LoginActivity extends AppCompatActivity {
         else {
             signIn(email, password);
         }
+    }
+
+    public void OnGuestSigninButtonClick(View v) {
+        mAuth.signInAnonymously()
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d(LOG_AUTH_TAG, "signInAnonymously:success");
+                            FirebaseUser user = mAuth.getCurrentUser();
+                            startActivity(new Intent(LoginActivity.this,MainActivity.class));
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Log.w(LOG_AUTH_TAG, "signInAnonymously:failure", task.getException());
+                            Toast.makeText(LoginActivity.this, "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+
+                        // ...
+                    }
+                });
 
     }
 
     private void rememberMe(String email, String password) {
-        if ( ((CheckBox)findViewById(R.id.rememberMe)).isChecked() ) {
+        if ( ((CheckBox)findViewById(R.id.cbRememberMe)).isChecked() ) {
             // Remember me
             getSharedPreferences(PREFS_NAME, MODE_PRIVATE)
                     .edit()

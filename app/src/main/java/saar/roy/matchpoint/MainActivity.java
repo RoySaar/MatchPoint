@@ -9,7 +9,9 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.widget.TextView;
@@ -24,31 +26,35 @@ import com.google.android.gms.maps.model.Marker;
 
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
+public class MainActivity extends AppCompatActivity {
 
-    private GoogleMap mMap;
-    private MapServices services;
-    private LocationManager locationManager;
-    private static final long MIN_TIME = 400;
-    private static final float MIN_DISTANCE = 1000;
-    private TextView mTextMessage;
+    private Fragment currentFragment;
+    private MapFragment mapFragment;
+
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            // Change the fragment according to the selected nav menu item
+            Fragment selectedFragment = null;
             switch (item.getItemId()) {
                 case R.id.navigation_map:
-                    mTextMessage.setText(R.string.title_home);
-                    return true;
+                    selectedFragment = MapFragment.newInstance();
+                    setTitle(R.string.title_map);
+                    break;
                 case R.id.navigation_dashboard:
-                    mTextMessage.setText(R.string.title_dashboard);
-                    return true;
+                    selectedFragment = DashboardFragment.newInstance();
+                    setTitle(R.string.title_dashboard);
+                    break;
                 case R.id.navigation_notifications:
-                    mTextMessage.setText(R.string.title_notifications);
-                    return true;
+                    setTitle(R.string.title_notifications);
+                    break;
             }
-            return false;
+            if (selectedFragment != currentFragment) {
+                changeFragment(selectedFragment);
+            }
+            return true;
         }
     };
 
@@ -56,82 +62,15 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        services = new MapServices();
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
-        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        mTextMessage = (TextView) findViewById(R.id.message);
+        changeFragment(MapFragment.newInstance());
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
     }
 
-    // Manipulates the map once available
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
-        Callback callback = new Callback<List<Court>>() {
-            @Override
-            public void onCallback(List<Court> courts) {
-                for (Court court : courts) {
-                    // Add a marker for each court
-                    mMap.addMarker(court.toMarkerOptions(MainActivity.this));
-                }
-            }
-        };
-        services.getCourts(callback);
-        mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
-            @Override
-            // Show the create match dialog
-            public void onInfoWindowClick(Marker marker) {
-                CreateMatchDialogFragment matchDialogFragment = CreateMatchDialogFragment.newInstance();
-                matchDialogFragment.setCourt(marker.getTitle(), marker.getSnippet());
-                FragmentManager fm = getSupportFragmentManager();
-                matchDialogFragment.show(fm, "Dialog");
-            }
-        });
-        moveCameraToCurrentLocation();
+    public void changeFragment(Fragment fragment) {
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.frame_layout, fragment,"map_fragment");
+        transaction.commit();
+        currentFragment = fragment;
     }
-
-    public void moveCameraToCurrentLocation() {
-
-        // Check for location permission
-        if (checkLocationPermission()) {
-            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, MIN_TIME, MIN_DISTANCE,
-                    new LocationListener() {
-                        @Override
-                        // Move camera to current location
-                        public void onLocationChanged(Location location) {
-                            LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-                            CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 10);
-                            mMap.animateCamera(cameraUpdate);
-                            locationManager.removeUpdates(this);
-                        }
-
-                        @Override
-                        public void onStatusChanged(String s, int i, Bundle bundle) {
-
-                        }
-
-                        @Override
-                        public void onProviderEnabled(String s) {
-
-                        }
-
-                        @Override
-                        public void onProviderDisabled(String s) {
-
-                        }
-                    });
-        }
-    }
-
-    public boolean checkLocationPermission() {
-        return (ActivityCompat.checkSelfPermission(this,
-                android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(this,
-                android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED);
-    }
-
 }
