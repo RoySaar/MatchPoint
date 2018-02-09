@@ -1,21 +1,19 @@
-package saar.roy.matchpoint;
+package saar.roy.matchpoint.services;
 
-import android.nfc.Tag;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
-import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import java.security.acl.LastOwnerException;
 import java.util.ArrayList;
 import java.util.List;
+
+import saar.roy.matchpoint.data.Court;
+import saar.roy.matchpoint.data.Match;
 
 /**
  * Created by roy on 22/01/18.
@@ -36,6 +34,7 @@ public class MapServices implements Services {
                             List<Court> courts = new ArrayList<>();
                             for (DocumentSnapshot document : task.getResult()) {
                                 courts.add(document.toObject(Court.class));
+
                             }
                             callback.onCallback(courts);
                         } else {

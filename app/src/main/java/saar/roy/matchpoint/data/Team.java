@@ -1,9 +1,9 @@
-package saar.roy.matchpoint;
+package saar.roy.matchpoint.data;
 
 /**
  * Created by Roy-PC on 25-Jan-18.
  */
 
-enum Team {
+public enum Team {
     TEAM1,TEAM2
 }

@@ -1,4 +1,4 @@
-package saar.roy.matchpoint;
+package saar.roy.matchpoint.data;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -8,7 +8,7 @@ import java.util.List;
  * Created by Roy-PC on 25-Jan-18.
  */
 
-class User {
+public class User {
     private String id;
     private List<String> friendIds;
     private UserStatistics statistics;

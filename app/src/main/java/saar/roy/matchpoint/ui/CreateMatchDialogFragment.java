@@ -1,6 +1,5 @@
-package saar.roy.matchpoint;
+package saar.roy.matchpoint.ui;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
@@ -9,11 +8,13 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.TimePicker;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
+
+import saar.roy.matchpoint.data.MatchParticipation;
+import saar.roy.matchpoint.R;
+import saar.roy.matchpoint.data.Team;
+import saar.roy.matchpoint.data.User;
 
 /**
  * Created by Eidan on 1/26/2018.
@@ -47,7 +48,7 @@ public class CreateMatchDialogFragment extends DialogFragment {
         View v = inflater.inflate(R.layout.create_match_dialog, null);
         //getDialog().setTitle("הזמנת מגרש");
         ArrayList<MatchParticipation> list = new ArrayList<>();
-        list.add(new MatchParticipation(new User("ניסים גרמה"),Team.TEAM2));
+        list.add(new MatchParticipation(new User("ניסים גרמה"), Team.TEAM2));
         ParticipationAdapter participationAdapter = new ParticipationAdapter(getContext(),list);
         //ParticipationAdapter participationAdapter =
           //      new ParticipationAdapter(getContext(),new ArrayList<MatchParticipation>());

@@ -1,10 +1,12 @@
-package saar.roy.matchpoint;
+package saar.roy.matchpoint.ui;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import saar.roy.matchpoint.R;
 
 /**
  * Created by Roy-PC on 07-Feb-18.

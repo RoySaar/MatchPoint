@@ -1,8 +1,7 @@
-package saar.roy.matchpoint;
+package saar.roy.matchpoint.ui;
 
 import android.content.Context;
 import android.content.res.AssetManager;
-import android.graphics.Color;
 import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,9 +9,11 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.TimePicker;
 
 import java.util.List;
+
+import saar.roy.matchpoint.R;
+import saar.roy.matchpoint.data.MatchParticipation;
 
 import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 

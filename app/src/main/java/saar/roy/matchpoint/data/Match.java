@@ -1,4 +1,4 @@
-package saar.roy.matchpoint;
+package saar.roy.matchpoint.data;
 
 import java.time.LocalDateTime;
 import java.util.List;

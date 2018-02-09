@@ -38,10 +38,7 @@
             android:resource="@array/preloaded_fonts" />
 
         <activity
-            android:name=".MapActivity"
-            android:label="@string/title_activity_map" />
-        <activity
-            android:name=".SplashActivity"
+            android:name=".ui.SplashActivity"
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -50,10 +47,10 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".LoginActivity"
+            android:name=".ui.LoginActivity"
             android:label="@string/title_activity_login" />
         <activity
-            android:name=".MainActivity"
+            android:name=".ui.MainActivity"
             android:label="@string/title_activity_main"></activity>
     </application>
 
