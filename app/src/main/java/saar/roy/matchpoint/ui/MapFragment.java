@@ -80,10 +80,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         //mMap.getUiSettings().setZoomControlsEnabled(true);
         Callback callback = new Callback<List<Court>>() {
             @Override
-            public void onCallback(List<Court> courts) {
+            public void onCallback(List<Court> obj) {
                 if (getContext() == null)
                     return;
-                for (Court court : courts) {
+                for (Court court : obj) {
                     // Add a marker for each court
                     mMap.addMarker(court.toMarkerOptions(getContext()));
                 }

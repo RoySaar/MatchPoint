@@ -9,5 +9,5 @@ import saar.roy.matchpoint.data.Court;
  */
 
 public interface Callback <T> {
-    void onCallback(List<Court> list);
+    void onCallback(T obj);
 }

@@ -19,7 +19,7 @@ import saar.roy.matchpoint.data.Match;
  * Created by roy on 22/01/18.
  */
 
-public class MapServices implements Services {
+public class MapServices {
 
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     public final String TAG = "Document:";

@@ -11,20 +11,10 @@ import saar.roy.matchpoint.data.Match;
  * Created by Roy-PC on 04-Feb-18.
  */
 
-public class AuthenticationServices implements Services {
+public class AuthenticationServices {
 
     public static final Pattern VALID_EMAIL_ADDRESS =
             Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
-
-    @Override
-    public void getCourts(Callback<List<Court>> callback) {
-
-    }
-
-    @Override
-    public void saveMatch(Match match) {
-
-    }
 
     public static Verification verifyEmailAndPassword(String email, String password) {
         if (email == null || email.equals("") || password == null || email.equals(""))
