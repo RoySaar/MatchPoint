@@ -1,8 +1,10 @@
 package saar.roy.matchpoint.ui;
 
 import android.Manifest;
+import android.animation.Animator;
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
@@ -13,6 +15,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
 
 import com.google.android.gms.maps.CameraUpdate;
@@ -45,8 +48,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private static final float MIN_DISTANCE = 1000;
 
     public static MapFragment newInstance() {
-        MapFragment fragment = new MapFragment();
-        return fragment;
+        return new MapFragment();
     }
 
     @Override
@@ -58,15 +60,17 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstance) {
-        View v = inflater.inflate(saar.roy.matchpoint.R.layout.fragment_map, container, false);
+        View v = inflater.inflate(saar.roy.matchpoint.R.layout.fragment_map, container,
+                false);
         services = new MapServices();
         // Obtain the MapView and get notified when the map is ready to be used.
-        mapView = (MapView) v.findViewById(R.id.mapView);
+        mapView = v.findViewById(R.id.mapView);
         mapView.onCreate(savedInstance);
         // Initialize the map
         MapsInitializer.initialize(this.getActivity());
         mapView.getMapAsync(this);
-        locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+        locationManager = (LocationManager) getActivity().getSystemService(Context
+                .LOCATION_SERVICE);
         return v;
     }
 
@@ -95,7 +99,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             @Override
             // Show the create match dialog
             public void onInfoWindowClick(Marker marker) {
-                CreateMatchDialogFragment matchDialogFragment = CreateMatchDialogFragment.newInstance();
+                final CreateMatchDialogFragment matchDialogFragment = CreateMatchDialogFragment
+                        .newInstance();
                 matchDialogFragment.setCourt(marker.getTitle(), marker.getSnippet());
                 FragmentManager fm = getActivity().getSupportFragmentManager();
                 matchDialogFragment.show(fm, "Dialog");

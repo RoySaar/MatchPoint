@@ -3,6 +3,7 @@ package saar.roy.matchpoint.ui;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,6 +18,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import dmax.dialog.SpotsDialog;
 import saar.roy.matchpoint.services.AuthenticationServices;
 import saar.roy.matchpoint.R;
 import saar.roy.matchpoint.services.Verification;
@@ -30,6 +32,7 @@ public class LoginActivity extends AppCompatActivity {
     public static final String PREFS_NAME = "MyPrefsFile";
     private static final String PREF_EMAIL = "email";
     private static final String PREF_PASSWORD = "password";
+    private android.app.AlertDialog loadingDialog;
 
 
     @Override
@@ -37,6 +40,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         getSupportActionBar().hide();
         setContentView(R.layout.activity_login);
+        loadingDialog = new SpotsDialog(LoginActivity.this,R.style.LoginDialog);
         authServices = new AuthenticationServices();
         mAuth = FirebaseAuth.getInstance();
         mAuthListener = new FirebaseAuth.AuthStateListener() {
@@ -65,6 +69,14 @@ public class LoginActivity extends AppCompatActivity {
             ((EditText)findViewById(R.id.tvPassword)).setText(password);
             ((CheckBox)findViewById(R.id.cbRememberMe)).setChecked(true);
         }
+    }
+
+    @Override
+    protected void onResume() {
+        // Hide the loading dialog
+        if(loadingDialog.isShowing())
+            loadingDialog.hide();
+        super.onResume();
     }
 
     @Override
@@ -152,11 +164,13 @@ public class LoginActivity extends AppCompatActivity {
             // Email or password are empty
             Toast.makeText(this,"Please fill in both email and password",Toast.LENGTH_SHORT).show();
         else {
+            loadingDialog.show();
             signIn(email, password);
         }
     }
 
     public void OnGuestSigninButtonClick(View v) {
+        loadingDialog.show();
         mAuth.signInAnonymously()
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -164,7 +178,6 @@ public class LoginActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(LOG_AUTH_TAG, "signInAnonymously:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
                             startActivity(new Intent(LoginActivity.this,MainActivity.class));
                         } else {
                             // If sign in fails, display a message to the user.

@@ -49,5 +49,6 @@
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
     <string name="profile_picture">Profile Picture</string>
+    <string name="court_image">Court Image</string>
 
 </resources>

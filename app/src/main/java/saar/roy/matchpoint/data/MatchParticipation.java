@@ -12,7 +12,7 @@ public class MatchParticipation {
     public MatchParticipation(User user, Team team) {
         this.user = user;
         this.team = team;
-        this.confirmed = true;
+        this.confirmed = false;
     }
 
     public User getUser() {

@@ -22,7 +22,7 @@ import saar.roy.matchpoint.data.Match;
 public class MapServices {
 
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
-    public final String TAG = "Document:";
+    private final String TAG = "Document:";
 
     public void getCourts(final Callback<List<Court>> callback) {
         db.collection("courts")
@@ -34,7 +34,6 @@ public class MapServices {
                             List<Court> courts = new ArrayList<>();
                             for (DocumentSnapshot document : task.getResult()) {
                                 courts.add(document.toObject(Court.class));
-
                             }
                             callback.onCallback(courts);
                         } else {
@@ -42,9 +41,13 @@ public class MapServices {
                         }
                     }
                 });
-    };
+    }
+
+    ;
 
     public void saveMatch(Match match) {
 
-    };
+    }
+
+    ;
 }

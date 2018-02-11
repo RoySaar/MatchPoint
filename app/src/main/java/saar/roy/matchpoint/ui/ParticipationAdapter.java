@@ -22,11 +22,9 @@ import static android.content.Context.LAYOUT_INFLATER_SERVICE;
  */
 
 
-
 public class ParticipationAdapter extends ArrayAdapter<MatchParticipation> {
 
-    AssetManager assetManager = getContext().getAssets();
-
+    private AssetManager assetManager = getContext().getAssets();
     private LayoutInflater lif;
 
     public ParticipationAdapter (Context context, List<MatchParticipation> participations) {
@@ -41,8 +39,8 @@ public class ParticipationAdapter extends ArrayAdapter<MatchParticipation> {
             convertView = LayoutInflater.from(getContext())
                     .inflate(R.layout.participation_item,parent,false);
         }
-        TextView tvName = (TextView) convertView.findViewById(R.id.tvName);
-        ImageView ivConfirmed = (ImageView) convertView.findViewById(R.id.ivConfirmed);
+        TextView tvName = convertView.findViewById(R.id.tvName);
+        ImageView ivConfirmed = convertView.findViewById(R.id.ivConfirmed);
         tvName.setText(participation.getUser().getName());
         if (participation.isConfirmed())
             ivConfirmed.setImageResource(R.drawable.confirmed);
@@ -57,10 +55,8 @@ public class ParticipationAdapter extends ArrayAdapter<MatchParticipation> {
                 tvName.setTextColor(getContext().getResources().getColor(R.color.colorAccent));
                 break;
         }
-        // Set listview item font as assistant
         final Typeface tvFont = Typeface.createFromAsset(assetManager,"fonts/assistant_semibold.ttf");
         tvName.setTypeface(tvFont);
-
         return convertView;
     }
 }

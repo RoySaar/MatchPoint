@@ -26,5 +26,24 @@
         <item name = "android:windowNoTitle">true</item>
     </style>
 
+    <style name="LoginDialog" parent="android:Theme.DeviceDefault.Dialog">
+        <item name="DialogTitleAppearance">@android:style/TextAppearance.Medium</item>
+        <item name="DialogTitleText">Logging In…</item>
+        <item name="DialogSpotColor">@color/colorAccent</item>
+        <item name="DialogSpotCount">4</item>
+    </style>
+
+    <style name="TitleBarCollapsed">
+        <item name="android:textColor">@color/textOnP</item>
+        <item name="fontFamily">@font/assistant_bold</item>
+        <item name="android:layout_marginRight">8dp</item>
+    </style>
+
+    <style name="TitleBarExpanded">
+        <item name="android:textColor">@color/textOnS</item>
+        <item name="fontFamily">@font/assistant_semibold</item>
+        <item name="android:layout_marginRight">8dp</item>
+    </style>
+
 
 </resources>

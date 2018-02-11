@@ -47,7 +47,7 @@
                         android:layout_marginEnd="8dp"
                         android:layout_marginStart="8dp"
                         android:layout_marginTop="8dp"
-                        android:background="@drawable/round_image_holder"
+                        android:background="@drawable/stroke"
                         android:contentDescription="@string/profile_picture"
                         app:srcCompat="@drawable/pin_ico" />
                 </FrameLayout>
