@@ -1,7 +1,10 @@
 package saar.roy.matchpoint.data;
 
+import android.widget.ListView;
+
 import com.google.android.gms.maps.model.LatLng;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -9,20 +12,18 @@ import java.util.List;
  */
 
 public class User {
-    private String id;
-    private List<String> friendIds;
-    private UserStatistics statistics;
-    private LatLng currentLocation;
-    boolean searchingForMatch;
+    private List<User> friends;
     private String name;
-
-    public User(String name) {
-        this.name = name;
-    }
-
-    public User(){};
 
     public String getName() {
         return name;
+    }
+
+    public List<String> getFriendNames() {
+        List<String> friendNames = new ArrayList<>();
+        for(User user : friends) {
+            friendNames.add(user.getName());
+        }
+        return friendNames;
     }
 }

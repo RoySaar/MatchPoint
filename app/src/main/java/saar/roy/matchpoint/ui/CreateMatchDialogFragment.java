@@ -3,22 +3,19 @@ package saar.roy.matchpoint.ui;
 import android.animation.Animator;
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
-import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.DialogFragment;
-import android.support.v7.widget.SearchView;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
-import android.view.WindowManager;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -29,6 +26,7 @@ import saar.roy.matchpoint.data.Team;
 import saar.roy.matchpoint.data.User;
 import saar.roy.matchpoint.services.Callback;
 import saar.roy.matchpoint.services.SearchServices;
+import saar.roy.matchpoint.services.UserServices;
 
 import static android.support.design.widget.Snackbar.LENGTH_SHORT;
 
@@ -36,10 +34,11 @@ import static android.support.design.widget.Snackbar.LENGTH_SHORT;
  * Created by Eidan on 1/26/2018.
  */
 
-public class CreateMatchDialogFragment extends DialogFragment implements android.widget.SearchView.OnQueryTextListener {
+public class CreateMatchDialogFragment extends DialogFragment {
 
     private String courtName;
     private String courtDescription;
+    private User currentUser;
     private android.widget.SearchView searchView;
     CollapsingToolbarLayout mCollapsingToolbarLayout;
     private SearchServices services;
@@ -63,30 +62,21 @@ public class CreateMatchDialogFragment extends DialogFragment implements android
 
     @SuppressLint("ResourceAsColor")
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-        View v = inflater.inflate(R.layout.create_match_dialog, null);
+    public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState){
+        final View v = inflater.inflate(R.layout.dialog_create_match, null);
         services = new SearchServices();
         ArrayList<MatchParticipation> list = new ArrayList<>();
         participationAdapter = new ParticipationAdapter(getContext(),list);
-        //ParticipationAdapter participationAdapter =
-          //      new ParticipationAdapter(getContext(),new ArrayList<MatchParticipation>());
-        ListView lvParticipations = v.findViewById(R.id.lvParticipations);
-        lvParticipations.setAdapter(participationAdapter);
-        searchView = v.findViewById(R.id.svFriends);
-        searchView.setOnQueryTextListener(this);
-        TextView tvCourtName = v.findViewById(R.id.tvCourtName);
-        TextView tvCourtDescription = v.findViewById(R.id.tvCourtDescription );
-        tvCourtName.setText(courtName);
-        tvCourtDescription.setText(courtDescription);
-        Button submitBtn = v.findViewById(R.id.submitBtn);
-        Button cancelBtn = v.findViewById(R.id.cancelBtn);
-        submitBtn.setOnClickListener(new View.OnClickListener() {
+        v.<ListView>findViewById(R.id.lvParticipations).setAdapter(participationAdapter);
+        v.<TextView>findViewById(R.id.tvCourtName).setText(courtName);
+        v.<TextView>findViewById(R.id.tvCourtDescription ).setText(courtDescription);
+        v.<Button>findViewById(R.id.submitBtn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 getDialog().dismiss();
             }
         });
-        cancelBtn.setOnClickListener(new View.OnClickListener() {
+        v.<Button>findViewById(R.id.cancelBtn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 getDialog().dismiss();
@@ -99,35 +89,18 @@ public class CreateMatchDialogFragment extends DialogFragment implements android
         mCollapsingToolbarLayout.setExpandedTitleMargin(64,8,8,64);
         mCollapsingToolbarLayout.setTitle(courtName);
         //setDialogAnimations();
+        UserServices.getInstance().getCurrentUser(new Callback<User>() {
+            @Override
+            public void onCallback(User user) {
+                currentUser = user;
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(),
+                        android.R.layout.simple_dropdown_item_1line, user.getFriendNames());
+                v.<AutoCompleteTextView>findViewById(R.id.actvSearchFriends).setAdapter(adapter);
+            }
+        });
         return v;
     }
 
-    @Override
-    public boolean onQueryTextSubmit(String query) {
-        findUser(query);
-        return true;
-    }
-
-    public void findUser(String query) {
-        Callback callback = new Callback<User>() {
-            @Override
-            public void onCallback(User user) {
-                // Make sure that the lobby isn't full
-                if (participationAdapter.getCount() == 4) {
-                    Snackbar.make(getActivity().findViewById(R.id.navigation),"הלובי מלא", LENGTH_SHORT ).show();
-                }
-                else if(!Objects.equals(user.getName(), "")) {
-                    participationAdapter.add(new MatchParticipation(user, Team.TEAM1));
-                }
-            }
-        };
-        services.findUser(query,callback);
-    }
-
-    @Override
-    public boolean onQueryTextChange(String s) {
-        return false;
-    }
 
     public void setDialogAnimations() {
         getDialog().setOnShowListener(new DialogInterface

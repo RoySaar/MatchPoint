@@ -115,12 +115,13 @@
                             android:textColor="@color/textOnP"
                             android:textSize="24sp" />
 
-                        <SearchView
-                            android:id="@+id/svFriends"
+                        <AutoCompleteTextView
+                            android:id="@+id/actvSearchFriends"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:queryHint="חפש חברים"
-                            android:textDirection="inherit" />
+                            android:layout_height="wrap_content"
+                            android:hint="@string/search_friends"
+                            android:layoutDirection="rtl"
+                            android:textDirection="rtl" />
 
                         <ListView
                             android:id="@+id/lvParticipations"

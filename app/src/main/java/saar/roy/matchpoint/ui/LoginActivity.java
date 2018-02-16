@@ -21,6 +21,7 @@ import com.google.firebase.auth.FirebaseUser;
 import dmax.dialog.SpotsDialog;
 import saar.roy.matchpoint.services.AuthenticationServices;
 import saar.roy.matchpoint.R;
+import saar.roy.matchpoint.services.UserServices;
 import saar.roy.matchpoint.services.Verification;
 
 public class LoginActivity extends AppCompatActivity {
@@ -166,6 +167,7 @@ public class LoginActivity extends AppCompatActivity {
         else {
             loadingDialog.show();
             signIn(email, password);
+            UserServices.getInstance().fetchCurrentUser();
         }
     }
 

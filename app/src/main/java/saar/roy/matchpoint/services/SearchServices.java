@@ -25,7 +25,6 @@ public class SearchServices {
     public final String TAG = "Document:";
 
     private final FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-    private User user = new User("");
 
     public void findUser(String name, final Callback<User> callback) {
         assert currentUser != null;
@@ -39,9 +38,8 @@ public class SearchServices {
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
                     for (DocumentSnapshot document : task.getResult()) {
-                        user = document.toObject(User.class);
+                        callback.onCallback(document.toObject(User.class));
                     }
-                    callback.onCallback(user);
                 }
             }
         });
