@@ -126,6 +126,7 @@ public class LoginActivity extends AppCompatActivity {
                                     Toast.LENGTH_SHORT).show();
                         }
                         else {
+                            UserServices.getInstance().fetchCurrentUser();
                             startActivity(new Intent(LoginActivity.this,MainActivity.class));
                         }
                     }
@@ -167,7 +168,6 @@ public class LoginActivity extends AppCompatActivity {
         else {
             loadingDialog.show();
             signIn(email, password);
-            UserServices.getInstance().fetchCurrentUser();
         }
     }
 

@@ -26,4 +26,8 @@ public class User {
         }
         return friendNames;
     }
+
+    public void addFriend(User user) {
+        friends.add(user);
+    }
 }

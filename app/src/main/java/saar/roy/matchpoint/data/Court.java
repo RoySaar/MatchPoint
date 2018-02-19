@@ -24,7 +24,7 @@ public class Court {
     public Court() {
     }
 
-    public LatLng getPosition() { return new LatLng(position.getLatitude(),position.getLongitude());}
+    public LatLng getPositionAsLatLng() { return new LatLng(position.getLatitude(),position.getLongitude());}
 
     public String getName() {
         return name;
@@ -43,7 +43,7 @@ public class Court {
         int ICON_WIDTH = 110;
         Bitmap smallMarker = Bitmap.createScaledBitmap(b, ICON_WIDTH, ICON_HEIGHT, false);
         return new MarkerOptions()
-                .position(getPosition())
+                .position(getPositionAsLatLng())
                 .icon(BitmapDescriptorFactory.fromBitmap(smallMarker))
                 .title(getName())
                 .snippet(getDescription() + " - " + getPrice() + "₪");

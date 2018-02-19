@@ -40,7 +40,6 @@ public class CreateMatchDialogFragment extends DialogFragment {
     private String courtDescription;
     private User currentUser;
     private android.widget.SearchView searchView;
-    CollapsingToolbarLayout mCollapsingToolbarLayout;
     private SearchServices services;
     ParticipationAdapter participationAdapter;
     public static final int DIALOG_ANIM_DURATION = 500;
@@ -82,22 +81,17 @@ public class CreateMatchDialogFragment extends DialogFragment {
                 getDialog().dismiss();
             }
         });
-        mCollapsingToolbarLayout = v.findViewById(R.id.collapsing);
+        CollapsingToolbarLayout mCollapsingToolbarLayout = v.findViewById(R.id.collapsing);
         mCollapsingToolbarLayout.setTitleEnabled(true);
         mCollapsingToolbarLayout.setCollapsedTitleTextAppearance(R.style.TitleBarCollapsed);
         mCollapsingToolbarLayout.setExpandedTitleTextAppearance(R.style.TitleBarExpanded);
         mCollapsingToolbarLayout.setExpandedTitleMargin(64,8,8,64);
         mCollapsingToolbarLayout.setTitle(courtName);
         //setDialogAnimations();
-        UserServices.getInstance().getCurrentUser(new Callback<User>() {
-            @Override
-            public void onCallback(User user) {
-                currentUser = user;
-                ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(),
-                        android.R.layout.simple_dropdown_item_1line, user.getFriendNames());
-                v.<AutoCompleteTextView>findViewById(R.id.actvSearchFriends).setAdapter(adapter);
-            }
-        });
+        currentUser = UserServices.getInstance().getCurrentUser();
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(),
+                android.R.layout.simple_dropdown_item_1line, currentUser.getFriendNames());
+        v.<AutoCompleteTextView>findViewById(R.id.actvSearchFriends).setAdapter(adapter);
         return v;
     }
 

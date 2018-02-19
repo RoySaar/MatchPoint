@@ -45,9 +45,5 @@ public class MapServices {
 
     ;
 
-    public void saveMatch(Match match) {
-
-    }
-
-    ;
+    public void saveMatch(Match match) {}
 }
