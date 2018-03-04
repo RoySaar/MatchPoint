@@ -34,7 +34,7 @@ import static android.support.design.widget.Snackbar.LENGTH_SHORT;
  * Created by Eidan on 1/26/2018.
  */
 
-public class CreateMatchDialogFragment extends DialogFragment {
+public class CreateMatchDialogFragment extends DialogFragment implements View.OnClickListener {
 
     private String courtName;
     private String courtDescription;
@@ -87,6 +87,8 @@ public class CreateMatchDialogFragment extends DialogFragment {
         mCollapsingToolbarLayout.setExpandedTitleTextAppearance(R.style.TitleBarExpanded);
         mCollapsingToolbarLayout.setExpandedTitleMargin(64,8,8,64);
         mCollapsingToolbarLayout.setTitle(courtName);
+        Button btnAddFriend = v.findViewById(R.id.btnAddFriend);
+        btnAddFriend.setOnClickListener(this);
         //setDialogAnimations();
         currentUser = UserServices.getInstance().getCurrentUser();
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(),
@@ -138,5 +140,13 @@ public class CreateMatchDialogFragment extends DialogFragment {
     public void setCourt(String courtName,String courtDescription) {
         this.courtName = courtName;
         this.courtDescription = courtDescription;
+    }
+
+    @Override
+    public void onClick(View view) {
+        String name = ((AutoCompleteTextView)getView().findViewById(R.id.actvSearchFriends)).getText().toString();
+        User user = UserServices.getInstance().getCurrentUser().getUserByName(name);
+        MatchParticipation mp = new MatchParticipation(user);
+        participationAdapter.add(mp);
     }
 }

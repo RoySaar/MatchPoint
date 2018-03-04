@@ -33,7 +33,14 @@ public class MapServices {
                         if (task.isSuccessful()) {
                             List<Court> courts = new ArrayList<>();
                             for (DocumentSnapshot document : task.getResult()) {
-                                courts.add(document.toObject(Court.class));
+                                Log.d("court" ,document.getGeoPoint("position").toString());
+                                Court court = document.toObject(Court.class);
+                                Log.d("court",court.getDescription());
+                                Log.d("court",court.getName());
+                                Log.d("court",String.valueOf(court.getPrice()));
+                                Log.d("court",court.getPositionAsLatLng().toString());
+
+                                courts.add(court);
                             }
                             callback.onCallback(courts);
                         } else {
@@ -45,5 +52,7 @@ public class MapServices {
 
     ;
 
-    public void saveMatch(Match match) {}
+    public void saveMatch(Match match) {
+        db.collection("matches").add(match);
+    }
 }

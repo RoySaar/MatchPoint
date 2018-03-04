@@ -9,7 +9,6 @@ import java.util.List;
 
 public class Match {
     private List<MatchParticipation> participations;
-    private MatchStatistics statistics;
     private Court court;
     private LocalDateTime time;
 }

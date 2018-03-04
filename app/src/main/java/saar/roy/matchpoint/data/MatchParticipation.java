@@ -7,20 +7,14 @@ package saar.roy.matchpoint.data;
 public class MatchParticipation {
     private User user;
     private boolean confirmed;
-    private Team team;
 
-    public MatchParticipation(User user, Team team) {
+    public MatchParticipation(User user) {
         this.user = user;
-        this.team = team;
         this.confirmed = false;
     }
 
     public User getUser() {
         return user;
-    }
-
-    public Team getTeam() {
-        return team;
     }
 
     public boolean isConfirmed() {

@@ -11,6 +11,8 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.List;
+
 import saar.roy.matchpoint.data.User;
 
 /**
@@ -41,7 +43,7 @@ public class UserServices {
                     @Override
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                         final User user = task.getResult().toObject(User.class);
-                        for(DocumentReference ref: (DocumentReference[])task.getResult().get("friends")) {
+                        for(DocumentReference ref: (List<DocumentReference>)task.getResult().get("friends")) {
                                 ref.get()
                                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                                 @Override

@@ -24,6 +24,10 @@ public class Court {
     public Court() {
     }
 
+    public GeoPoint getPosition() {
+        return position;
+    }
+
     public LatLng getPositionAsLatLng() { return new LatLng(position.getLatitude(),position.getLongitude());}
 
     public String getName() {

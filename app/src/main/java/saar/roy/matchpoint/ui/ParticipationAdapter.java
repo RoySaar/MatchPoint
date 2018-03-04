@@ -46,15 +46,6 @@ public class ParticipationAdapter extends ArrayAdapter<MatchParticipation> {
             ivConfirmed.setImageResource(R.drawable.confirmed);
         else
             ivConfirmed.setImageResource(R.drawable.unconfirmed);
-        // Set text color according to team
-        switch (participation.getTeam()) {
-            case TEAM1:
-                tvName.setTextColor(getContext().getResources().getColor(R.color.colorPrimaryDark));
-                break;
-            case TEAM2:
-                tvName.setTextColor(getContext().getResources().getColor(R.color.colorAccent));
-                break;
-        }
         final Typeface tvFont = Typeface.createFromAsset(assetManager,"fonts/assistant_semibold.ttf");
         tvName.setTypeface(tvFont);
         return convertView;
