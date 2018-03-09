@@ -25,18 +25,6 @@ public class User {
         return name;
     }
 
-    public List<String> getFriendNames() {
-        List<String> friendNames = new ArrayList<>();
-        for(User user : friends) {
-            friendNames.add(user.getName());
-        }
-        return friendNames;
-    }
-
-    public void addFriend(User user) {
-        friends.add(user);
-    }
-
     public DocumentReference getUserByName(String name) {
         for (DocumentReference user : friends) {
             if (user.get().equals(name))
@@ -47,5 +35,9 @@ public class User {
 
     public List<DocumentReference> getFriends() {
         return friends;
+    }
+
+    public void addFriend(DocumentReference ref) {
+        friends.add(ref);
     }
 }

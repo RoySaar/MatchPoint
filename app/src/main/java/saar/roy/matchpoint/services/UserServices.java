@@ -4,13 +4,16 @@ import android.support.annotation.NonNull;
 import android.telecom.Call;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import saar.roy.matchpoint.data.User;
@@ -43,18 +46,29 @@ public class UserServices {
                     @Override
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                         final User user = task.getResult().toObject(User.class);
-                        for(DocumentReference ref: (List<DocumentReference>)task.getResult().get("friends")) {
-                                ref.get()
-                                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                @Override
-                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                    user.addFriend(task.getResult().toObject(User.class));
-                                }
-                            });
-                        }
+                        //for(DocumentReference ref: (List<DocumentReference>)task.getResult().get("friends")) {
+                        //        user.addFriend(ref);
+                        //}
                         currentUser = user;
                     }
                 });
+    }
+
+    public void getFriendNames(User user, final Callback<List<String>> callback){
+        List<Task<DocumentSnapshot>> tasks = new ArrayList<>();
+        for(DocumentReference ref : user.getFriends()) {
+            tasks.add(ref.get());
+        }
+        Tasks.<DocumentSnapshot>whenAllSuccess(tasks).addOnSuccessListener(new OnSuccessListener<List<DocumentSnapshot>>() {
+            @Override
+            public void onSuccess(List<DocumentSnapshot> documentSnapshots) {
+                final List<String> friendNames = new ArrayList<>();
+                for (DocumentSnapshot doc : documentSnapshots){
+                    friendNames.add(doc.getString("name"));
+                }
+                callback.onCallback(friendNames);
+            }
+        });
     }
 
     public User getCurrentUser() {

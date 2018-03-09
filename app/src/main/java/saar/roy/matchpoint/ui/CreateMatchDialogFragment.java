@@ -17,7 +17,10 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.firebase.firestore.DocumentReference;
+
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import saar.roy.matchpoint.data.MatchParticipation;
@@ -90,10 +93,16 @@ public class CreateMatchDialogFragment extends DialogFragment implements View.On
         Button btnAddFriend = v.findViewById(R.id.btnAddFriend);
         btnAddFriend.setOnClickListener(this);
         //setDialogAnimations();
+        Callback<List<String>> callback = new Callback<List<String>>() {
+            @Override
+            public void onCallback(List<String> names) {
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(),
+                        android.R.layout.simple_dropdown_item_1line, names);
+                v.<AutoCompleteTextView>findViewById(R.id.actvSearchFriends).setAdapter(adapter);
+            }
+        };
         currentUser = UserServices.getInstance().getCurrentUser();
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(),
-                android.R.layout.simple_dropdown_item_1line, currentUser.getFriendNames());
-        v.<AutoCompleteTextView>findViewById(R.id.actvSearchFriends).setAdapter(adapter);
+        UserServices.getInstance().getFriendNames(currentUser,callback);
         return v;
     }
 
@@ -145,8 +154,8 @@ public class CreateMatchDialogFragment extends DialogFragment implements View.On
     @Override
     public void onClick(View view) {
         String name = ((AutoCompleteTextView)getView().findViewById(R.id.actvSearchFriends)).getText().toString();
-        User user = UserServices.getInstance().getCurrentUser().getUserByName(name);
-        MatchParticipation mp = new MatchParticipation(user);
+        DocumentReference ref = UserServices.getInstance().getCurrentUser().getUserByName(name);
+        MatchParticipation mp = new MatchParticipation(ref);
         participationAdapter.add(mp);
     }
 }

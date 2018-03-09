@@ -10,6 +10,9 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentSnapshot;
+
 import java.util.List;
 
 import saar.roy.matchpoint.R;
@@ -34,14 +37,19 @@ public class ParticipationAdapter extends ArrayAdapter<MatchParticipation> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        MatchParticipation participation = getItem(position);
+        final MatchParticipation participation = getItem(position);
         if (convertView == null){
             convertView = LayoutInflater.from(getContext())
                     .inflate(R.layout.participation_item,parent,false);
         }
-        TextView tvName = convertView.findViewById(R.id.tvName);
+        final TextView tvName = convertView.findViewById(R.id.tvName);
         ImageView ivConfirmed = convertView.findViewById(R.id.ivConfirmed);
-        tvName.setText(participation.getUser().getName());
+        participation.getUser().get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                tvName.setText(documentSnapshot.getString("name"));
+            }
+        });
         if (participation.isConfirmed())
             ivConfirmed.setImageResource(R.drawable.confirmed);
         else
