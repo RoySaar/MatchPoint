@@ -92,17 +92,10 @@ public class CreateMatchDialogFragment extends DialogFragment implements View.On
         mCollapsingToolbarLayout.setTitle(courtName);
         Button btnAddFriend = v.findViewById(R.id.btnAddFriend);
         btnAddFriend.setOnClickListener(this);
-        //setDialogAnimations();
-        Callback<List<String>> callback = new Callback<List<String>>() {
-            @Override
-            public void onCallback(List<String> names) {
-                ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(),
-                        android.R.layout.simple_dropdown_item_1line, names);
-                v.<AutoCompleteTextView>findViewById(R.id.actvSearchFriends).setAdapter(adapter);
-            }
-        };
         currentUser = UserServices.getInstance().getCurrentUser();
-        UserServices.getInstance().getFriendNames(currentUser,callback);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(),
+                android.R.layout.simple_dropdown_item_1line, currentUser.getFriendNames());
+        v.<AutoCompleteTextView>findViewById(R.id.actvSearchFriends).setAdapter(adapter);
         return v;
     }
 

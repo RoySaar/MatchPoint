@@ -54,23 +54,6 @@ public class UserServices {
                 });
     }
 
-    public void getFriendNames(User user, final Callback<List<String>> callback){
-        List<Task<DocumentSnapshot>> tasks = new ArrayList<>();
-        for(DocumentReference ref : user.getFriends()) {
-            tasks.add(ref.get());
-        }
-        Tasks.<DocumentSnapshot>whenAllSuccess(tasks).addOnSuccessListener(new OnSuccessListener<List<DocumentSnapshot>>() {
-            @Override
-            public void onSuccess(List<DocumentSnapshot> documentSnapshots) {
-                final List<String> friendNames = new ArrayList<>();
-                for (DocumentSnapshot doc : documentSnapshots){
-                    friendNames.add(doc.getString("name"));
-                }
-                callback.onCallback(friendNames);
-            }
-        });
-    }
-
     public User getCurrentUser() {
         return currentUser;
     }
