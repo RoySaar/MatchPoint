@@ -50,6 +50,8 @@
     <string name="title_notifications">Notifications</string>
     <string name="profile_picture">Profile Picture</string>
     <string name="court_image">Court Image</string>
+    <string name="name_placeholder">שם כלשהו</string>
+    <string name="select_time">בחר שעה</string>
 
 
 </resources>

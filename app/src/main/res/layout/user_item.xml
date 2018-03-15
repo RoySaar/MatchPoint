@@ -9,20 +9,14 @@
     android:textDirection="rtl">
 
     <TextView
-        android:id="@+id/tvParticipaitonName"
-        android:layout_width="wrap_content"
+        android:id="@+id/tvSearchName"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_weight="1"
         android:fontFamily="@font/assistant_semibold"
+        android:text="@string/name_placeholder"
         android:textColor="@color/textOnP"
         android:textSize="18sp" />
 
-    <ImageView
-        android:id="@+id/ivConfirmed"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:layout_marginTop="2dp"
-        android:layout_weight="1"
-        android:src="@drawable/unconfirmed" />
 </LinearLayout>

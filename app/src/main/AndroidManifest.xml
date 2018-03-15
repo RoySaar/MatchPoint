@@ -51,8 +51,7 @@
             android:label="@string/title_activity_login" />
         <activity
             android:name=".ui.MainActivity"
-            android:label="@string/title_activity_main"
-            android:windowSoftInputMode="adjustResize" />
+            android:label="@string/title_activity_main"/>
     </application>
 
 </manifest>

@@ -3,6 +3,7 @@ package saar.roy.matchpoint.ui;
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.graphics.Typeface;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import saar.roy.matchpoint.R;
@@ -30,19 +32,27 @@ public class ParticipationAdapter extends ArrayAdapter<MatchParticipation> {
     private AssetManager assetManager = getContext().getAssets();
     private LayoutInflater lif;
 
-    public ParticipationAdapter (Context context, List<MatchParticipation> participations) {
-        super(context,0,participations);
+    public ParticipationAdapter(Context context, List<MatchParticipation> participations) {
+        super(context, 0, participations);
         lif = (LayoutInflater) context.getSystemService(LAYOUT_INFLATER_SERVICE);
+    }
+
+    public List<MatchParticipation> getParticipations() {
+        List<MatchParticipation> participations = new ArrayList<>();
+        for (int i = 0; i < getCount(); i++) {
+            participations.add(getItem(i));
+        }
+        return participations;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         final MatchParticipation participation = getItem(position);
-        if (convertView == null){
+        if (convertView == null) {
             convertView = LayoutInflater.from(getContext())
-                    .inflate(R.layout.participation_item,parent,false);
+                    .inflate(R.layout.participation_item, parent, false);
         }
-        final TextView tvName = convertView.findViewById(R.id.tvName);
+        final TextView tvName = convertView.findViewById(R.id.tvParticipaitonName);
         ImageView ivConfirmed = convertView.findViewById(R.id.ivConfirmed);
         participation.getUser().get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
@@ -54,7 +64,7 @@ public class ParticipationAdapter extends ArrayAdapter<MatchParticipation> {
             ivConfirmed.setImageResource(R.drawable.confirmed);
         else
             ivConfirmed.setImageResource(R.drawable.unconfirmed);
-        final Typeface tvFont = Typeface.createFromAsset(assetManager,"fonts/assistant_semibold.ttf");
+        final Typeface tvFont = Typeface.createFromAsset(assetManager, "fonts/assistant_semibold.ttf");
         tvName.setTypeface(tvFont);
         return convertView;
     }

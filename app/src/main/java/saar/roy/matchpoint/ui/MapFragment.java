@@ -42,7 +42,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     private MapView mapView;
     private GoogleMap mMap;
-    private MapServices services;
     private LocationManager locationManager;
     private static final long MIN_TIME = 400;
     private static final float MIN_DISTANCE = 1000;
@@ -62,7 +61,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                              Bundle savedInstance) {
         View v = inflater.inflate(saar.roy.matchpoint.R.layout.fragment_map, container,
                 false);
-        services = new MapServices();
         // Obtain the MapView and get notified when the map is ready to be used.
         mapView = v.findViewById(R.id.mapView);
         mapView.onCreate(savedInstance);
@@ -79,7 +77,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         // Enable current location button
-        //mMap.setMyLocationEnabled(true);
+        mMap.setMyLocationEnabled(true);
         // Enable zoom controls
         //mMap.getUiSettings().setZoomControlsEnabled(true);
         Callback callback = new Callback<List<Court>>() {
@@ -87,13 +85,14 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             public void onCallback(List<Court> courts) {
                 if (getContext() == null)
                     return;
+                MapServices.getInstance().setCourts(courts);
                 for (Court court : courts) {
                     // Add a marker for each court
                     mMap.addMarker(court.toMarkerOptions(getContext()));
                 }
             }
         };
-        services.getCourts(callback);
+        MapServices.getInstance().getCourts(callback);
         // Snippet on click
         mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
             @Override
@@ -102,6 +101,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 final CreateMatchDialogFragment matchDialogFragment = CreateMatchDialogFragment
                         .newInstance();
                 matchDialogFragment.setCourt(marker.getTitle(), marker.getSnippet());
+                MapServices.getInstance().setCurrentCourt(marker.getTitle());
                 FragmentManager fm = getActivity().getSupportFragmentManager();
                 matchDialogFragment.show(fm, "Dialog");
             }

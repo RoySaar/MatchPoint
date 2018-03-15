@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.DialogFragment;
+import android.text.method.HideReturnsTransformationMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewAnimationUtils;
@@ -16,18 +17,22 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.firestore.DocumentReference;
 
+import java.security.Permission;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import saar.roy.matchpoint.data.Match;
 import saar.roy.matchpoint.data.MatchParticipation;
 import saar.roy.matchpoint.R;
 import saar.roy.matchpoint.data.Team;
 import saar.roy.matchpoint.data.User;
 import saar.roy.matchpoint.services.Callback;
+import saar.roy.matchpoint.services.MapServices;
 import saar.roy.matchpoint.services.SearchServices;
 import saar.roy.matchpoint.services.UserServices;
 
@@ -42,7 +47,6 @@ public class CreateMatchDialogFragment extends DialogFragment implements View.On
     private String courtName;
     private String courtDescription;
     private User currentUser;
-    private android.widget.SearchView searchView;
     private SearchServices services;
     ParticipationAdapter participationAdapter;
     public static final int DIALOG_ANIM_DURATION = 500;
@@ -64,18 +68,22 @@ public class CreateMatchDialogFragment extends DialogFragment implements View.On
 
     @SuppressLint("ResourceAsColor")
     @Override
-    public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState){
+    public View onCreateView(LayoutInflater inflater, final ViewGroup container
+            , Bundle savedInstanceState) {
         final View v = inflater.inflate(R.layout.dialog_create_match, null);
         services = new SearchServices();
         ArrayList<MatchParticipation> list = new ArrayList<>();
-        participationAdapter = new ParticipationAdapter(getContext(),list);
+        participationAdapter = new ParticipationAdapter(getContext(), list);
         v.<ListView>findViewById(R.id.lvParticipations).setAdapter(participationAdapter);
         v.<TextView>findViewById(R.id.tvCourtName).setText(courtName);
-        v.<TextView>findViewById(R.id.tvCourtDescription ).setText(courtDescription);
+        v.<TextView>findViewById(R.id.tvCourtDescription).setText(courtDescription);
         v.<Button>findViewById(R.id.submitBtn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getDialog().dismiss();
+                if (participationAdapter.getCount() != 0)
+                    saveMatch();
+                else
+                    Toast.makeText(getContext(),"The Lobby Is Empty.",Toast.LENGTH_SHORT).show();
             }
         });
         v.<Button>findViewById(R.id.cancelBtn).setOnClickListener(new View.OnClickListener() {
@@ -88,7 +96,7 @@ public class CreateMatchDialogFragment extends DialogFragment implements View.On
         mCollapsingToolbarLayout.setTitleEnabled(true);
         mCollapsingToolbarLayout.setCollapsedTitleTextAppearance(R.style.TitleBarCollapsed);
         mCollapsingToolbarLayout.setExpandedTitleTextAppearance(R.style.TitleBarExpanded);
-        mCollapsingToolbarLayout.setExpandedTitleMargin(64,8,8,64);
+        mCollapsingToolbarLayout.setExpandedTitleMargin(64, 8, 8, 64);
         mCollapsingToolbarLayout.setTitle(courtName);
         Button btnAddFriend = v.findViewById(R.id.btnAddFriend);
         btnAddFriend.setOnClickListener(this);
@@ -103,7 +111,8 @@ public class CreateMatchDialogFragment extends DialogFragment implements View.On
     public void setDialogAnimations() {
         getDialog().setOnShowListener(new DialogInterface
                 .OnShowListener() {
-            @Override public void onShow(DialogInterface dialog) {
+            @Override
+            public void onShow(DialogInterface dialog) {
                 final View view = getDialog().getWindow()
                         .getDecorView();
                 final int centerX = view.getWidth() / 2;
@@ -111,17 +120,18 @@ public class CreateMatchDialogFragment extends DialogFragment implements View.On
                 float startRadius = 20;
                 float endRadius = view.getHeight();
                 Animator animator = ViewAnimationUtils.createCircularReveal(view
-                        ,centerX
-                        ,centerY
-                        ,startRadius
-                        ,endRadius);
+                        , centerX
+                        , centerY
+                        , startRadius
+                        , endRadius);
                 animator.setDuration(DIALOG_ANIM_DURATION);
                 animator.start();
             }
         });
         getDialog().setOnDismissListener(new DialogInterface
                 .OnDismissListener() {
-            @Override public void onDismiss(DialogInterface dialog) {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
                 final View view = getDialog().getWindow()
                         .getDecorView();
                 final int centerX = view.getWidth() / 2;
@@ -129,26 +139,46 @@ public class CreateMatchDialogFragment extends DialogFragment implements View.On
                 float startRadius = view.getHeight();
                 float endRadius = 0;
                 Animator animator = ViewAnimationUtils.createCircularReveal(view
-                        ,centerX
-                        ,centerY
-                        ,startRadius
-                        ,endRadius);
+                        , centerX
+                        , centerY
+                        , startRadius
+                        , endRadius);
                 animator.setDuration(DIALOG_ANIM_DURATION);
                 animator.start();
             }
         });
     }
 
-    public void setCourt(String courtName,String courtDescription) {
+    public void setCourt(String courtName, String courtDescription) {
         this.courtName = courtName;
         this.courtDescription = courtDescription;
     }
 
     @Override
     public void onClick(View view) {
-        String name = ((AutoCompleteTextView)getView().findViewById(R.id.actvSearchFriends)).getText().toString();
+        String name = ((AutoCompleteTextView) getView().findViewById(R.id.actvSearchFriends))
+                .getText().toString();
         DocumentReference ref = UserServices.getInstance().getCurrentUser().getUserByName(name);
         MatchParticipation mp = new MatchParticipation(ref);
-        participationAdapter.add(mp);
+        if (participationAdapter.getCount() < 4) {
+            boolean validAdd = true;
+            for (int i = 0; i < participationAdapter.getCount(); i++) {
+                if (participationAdapter.getItem(i).getUser() == mp.getUser()) {
+                    Toast.makeText(getContext(), "This Player Is Already In The Lobby."
+                            , Toast.LENGTH_SHORT).show();
+                    validAdd = false;
+                }
+            }
+            if (validAdd)
+            participationAdapter.add(mp);
+        }
+        else
+            Toast.makeText(getContext(),"The Lobby Is Full.",Toast.LENGTH_SHORT).show();
+    }
+
+    public void saveMatch() {
+        MapServices.getInstance().saveMatch(new Match(participationAdapter.getParticipations()
+                ,MapServices.getInstance().getCurrentCourt()));
+        getDialog().dismiss();
     }
 }

@@ -5,12 +5,15 @@ import android.util.Log;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.ServerValue;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import saar.roy.matchpoint.data.Court;
 import saar.roy.matchpoint.data.Match;
@@ -20,9 +23,34 @@ import saar.roy.matchpoint.data.Match;
  */
 
 public class MapServices {
+    private static MapServices instance = null;
+
+    private Court currentCourt;
+
+    private List<Court> courts;
 
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private final String TAG = "Document:";
+
+    public static MapServices getInstance() {
+        if (instance == null)
+            instance = new MapServices();
+        return instance;
+    }
+
+    private MapServices() {
+    }
+
+    public void setCourts(List<Court> courts) {
+        this.courts = courts;
+    }
+
+    public void setCurrentCourt(String courtName) {
+        for (Court court: courts) {
+            if (court.getName().equals(courtName))
+                currentCourt = court;
+        }
+    }
 
     public void getCourts(final Callback<List<Court>> callback) {
         db.collection("courts")
@@ -33,13 +61,7 @@ public class MapServices {
                         if (task.isSuccessful()) {
                             List<Court> courts = new ArrayList<>();
                             for (DocumentSnapshot document : task.getResult()) {
-                                Log.d("court" ,document.getGeoPoint("position").toString());
                                 Court court = document.toObject(Court.class);
-                                Log.d("court",court.getDescription());
-                                Log.d("court",court.getName());
-                                Log.d("court",String.valueOf(court.getPrice()));
-                                Log.d("court",court.getPositionAsLatLng().toString());
-
                                 courts.add(court);
                             }
                             callback.onCallback(courts);
@@ -54,5 +76,9 @@ public class MapServices {
 
     public void saveMatch(Match match) {
         db.collection("matches").add(match);
+    }
+
+    public Court getCurrentCourt() {
+        return currentCourt;
     }
 }

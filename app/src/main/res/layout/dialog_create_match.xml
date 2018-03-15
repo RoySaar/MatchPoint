@@ -70,7 +70,7 @@
 
                 <android.support.v4.widget.NestedScrollView
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:fillViewport="true">
 
                     <LinearLayout
@@ -98,6 +98,33 @@
 
                         <View
                             android:id="@+id/divCreateMatchTitle"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_marginTop="8dp"
+                            android:alpha="0.5"
+                            android:background="@android:color/darker_gray" />
+
+                        <android.support.v7.widget.AppCompatTextView
+                            android:id="@+id/tvSelectTime"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:fontFamily="@font/assistant_semibold"
+                            android:text="@string/select_time"
+                            android:textColor="@color/textOnP"
+                            android:textSize="24sp" />
+
+
+                        <TimePicker
+                            android:id="@+id/tpMatchDialog"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:headerBackground="@color/colorAccent" />
+
+                        <View
+                            android:id="@+id/divCreateMatchTime"
                             android:layout_width="match_parent"
                             android:layout_height="1dp"
                             android:layout_gravity="center_horizontal"

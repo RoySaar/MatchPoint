@@ -33,7 +33,8 @@ public class UserServices {
         return instance;
     }
 
-    private UserServices() { }
+    private UserServices() {
+    }
 
     public void fetchCurrentUser() {
         if (FirebaseAuth.getInstance().getCurrentUser() == null) {
