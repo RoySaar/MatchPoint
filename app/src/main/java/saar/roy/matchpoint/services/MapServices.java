@@ -1,11 +1,14 @@
 package saar.roy.matchpoint.services;
 
+import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.ServerValue;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -25,10 +28,6 @@ import saar.roy.matchpoint.data.Match;
 public class MapServices {
     private static MapServices instance = null;
 
-    private Court currentCourt;
-
-    private List<Court> courts;
-
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private final String TAG = "Document:";
 
@@ -41,30 +40,18 @@ public class MapServices {
     private MapServices() {
     }
 
-    public void setCourts(List<Court> courts) {
-        this.courts = courts;
-    }
-
-    public void setCurrentCourt(String courtName) {
-        for (Court court: courts) {
-            if (court.getName().equals(courtName))
-                currentCourt = court;
-        }
-    }
-
-    public void getCourts(final Callback<List<Court>> callback) {
+    public void getCourtMarkers(final Callback<Map<DocumentReference,Court>> callback, final Bitmap icon) {
         db.collection("courts")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
-                            List<Court> courts = new ArrayList<>();
+                            Map<DocumentReference,Court> map = new HashMap<>();
                             for (DocumentSnapshot document : task.getResult()) {
-                                Court court = document.toObject(Court.class);
-                                courts.add(court);
+                                map.put(document.getReference(),document.toObject(Court.class));
                             }
-                            callback.onCallback(courts);
+                            callback.onCallback(map);
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
                         }
@@ -78,7 +65,4 @@ public class MapServices {
         db.collection("matches").add(match);
     }
 
-    public Court getCurrentCourt() {
-        return currentCourt;
-    }
 }

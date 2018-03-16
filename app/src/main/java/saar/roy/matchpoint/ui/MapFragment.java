@@ -6,6 +6,8 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -26,8 +28,10 @@ import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
+import com.google.firebase.firestore.DocumentReference;
 
 import java.util.List;
+import java.util.Map;
 
 import saar.roy.matchpoint.R;
 import saar.roy.matchpoint.data.Court;
@@ -80,19 +84,20 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         mMap.setMyLocationEnabled(true);
         // Enable zoom controls
         //mMap.getUiSettings().setZoomControlsEnabled(true);
-        Callback callback = new Callback<List<Court>>() {
+        final Bitmap smallMarker = getMarkerIcon();
+        Callback callback = new Callback<Map<DocumentReference,Court>>() {
             @Override
-            public void onCallback(List<Court> courts) {
+            public void onCallback(Map<DocumentReference,Court> map) {
                 if (getContext() == null)
                     return;
-                MapServices.getInstance().setCourts(courts);
-                for (Court court : courts) {
+                for (Map.Entry<DocumentReference,Court> entry : map.entrySet()) {
                     // Add a marker for each court
-                    mMap.addMarker(court.toMarkerOptions(getContext()));
+                    Marker m = mMap.addMarker(entry.getValue().toMarkerOptions(smallMarker));
+                    m.setTag(entry.getKey());
                 }
             }
         };
-        MapServices.getInstance().getCourts(callback);
+        MapServices.getInstance().getCourtMarkers(callback,smallMarker);
         // Snippet on click
         mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
             @Override
@@ -100,13 +105,20 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             public void onInfoWindowClick(Marker marker) {
                 final CreateMatchDialogFragment matchDialogFragment = CreateMatchDialogFragment
                         .newInstance();
-                matchDialogFragment.setCourt(marker.getTitle(), marker.getSnippet());
-                MapServices.getInstance().setCurrentCourt(marker.getTitle());
+                matchDialogFragment.setCourt(marker.getTitle(), marker.getSnippet(),(DocumentReference)marker.getTag());
                 FragmentManager fm = getActivity().getSupportFragmentManager();
                 matchDialogFragment.show(fm, "Dialog");
             }
         });
         moveCameraToCurrentLocation();
+    }
+
+    private Bitmap getMarkerIcon() {
+        BitmapDrawable bitmapDrawable = (BitmapDrawable) getContext().getDrawable(R.drawable.marker_icon);
+        Bitmap b = bitmapDrawable.getBitmap();
+        int ICON_HEIGHT = 210;
+        int ICON_WIDTH = 110;
+        return Bitmap.createScaledBitmap(b, ICON_WIDTH, ICON_HEIGHT, false);
     }
 
     @Override

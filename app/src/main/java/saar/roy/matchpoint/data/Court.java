@@ -6,6 +6,7 @@ import android.graphics.drawable.BitmapDrawable;
 
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.firestore.GeoPoint;
 
@@ -40,12 +41,7 @@ public class Court {
 
     public double getPrice() { return price; }
 
-    public MarkerOptions toMarkerOptions(Context context) {
-        BitmapDrawable bitmapDrawable = (BitmapDrawable) context.getDrawable(R.drawable.marker_icon);
-        Bitmap b = bitmapDrawable.getBitmap();
-        int ICON_HEIGHT = 210;
-        int ICON_WIDTH = 110;
-        Bitmap smallMarker = Bitmap.createScaledBitmap(b, ICON_WIDTH, ICON_HEIGHT, false);
+    public MarkerOptions toMarkerOptions(Bitmap smallMarker) {
         return new MarkerOptions()
                 .position(getPositionAsLatLng())
                 .icon(BitmapDescriptorFactory.fromBitmap(smallMarker))

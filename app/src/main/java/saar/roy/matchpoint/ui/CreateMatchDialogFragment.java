@@ -23,6 +23,7 @@ import com.google.firebase.firestore.DocumentReference;
 
 import java.security.Permission;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -47,7 +48,8 @@ public class CreateMatchDialogFragment extends DialogFragment implements View.On
     private String courtName;
     private String courtDescription;
     private User currentUser;
-    private SearchServices services;
+    private DocumentReference courtReference;
+    private
     ParticipationAdapter participationAdapter;
     public static final int DIALOG_ANIM_DURATION = 500;
 
@@ -71,19 +73,20 @@ public class CreateMatchDialogFragment extends DialogFragment implements View.On
     public View onCreateView(LayoutInflater inflater, final ViewGroup container
             , Bundle savedInstanceState) {
         final View v = inflater.inflate(R.layout.dialog_create_match, null);
-        services = new SearchServices();
         ArrayList<MatchParticipation> list = new ArrayList<>();
         participationAdapter = new ParticipationAdapter(getContext(), list);
+
         v.<ListView>findViewById(R.id.lvParticipations).setAdapter(participationAdapter);
         v.<TextView>findViewById(R.id.tvCourtName).setText(courtName);
         v.<TextView>findViewById(R.id.tvCourtDescription).setText(courtDescription);
+        v.findViewById(R.id.tpMatchDialog);
         v.<Button>findViewById(R.id.submitBtn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (participationAdapter.getCount() != 0)
                     saveMatch();
                 else
-                    Toast.makeText(getContext(),"The Lobby Is Empty.",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "The Lobby Is Empty.", Toast.LENGTH_SHORT).show();
             }
         });
         v.<Button>findViewById(R.id.cancelBtn).setOnClickListener(new View.OnClickListener() {
@@ -149,9 +152,10 @@ public class CreateMatchDialogFragment extends DialogFragment implements View.On
         });
     }
 
-    public void setCourt(String courtName, String courtDescription) {
+    public void setCourt(String courtName, String courtDescription, DocumentReference ref) {
         this.courtName = courtName;
         this.courtDescription = courtDescription;
+        this.courtReference = ref;
     }
 
     @Override
@@ -170,15 +174,16 @@ public class CreateMatchDialogFragment extends DialogFragment implements View.On
                 }
             }
             if (validAdd)
-            participationAdapter.add(mp);
-        }
-        else
-            Toast.makeText(getContext(),"The Lobby Is Full.",Toast.LENGTH_SHORT).show();
+                participationAdapter.add(mp);
+        } else
+            Toast.makeText(getContext(), "The Lobby Is Full.", Toast.LENGTH_SHORT).show();
     }
 
     public void saveMatch() {
-        MapServices.getInstance().saveMatch(new Match(participationAdapter.getParticipations()
-                ,MapServices.getInstance().getCurrentCourt()));
+        MapServices.getInstance().saveMatch(
+                new Match(participationAdapter.getParticipations(),
+                        courtReference)
+        );
         getDialog().dismiss();
     }
 }

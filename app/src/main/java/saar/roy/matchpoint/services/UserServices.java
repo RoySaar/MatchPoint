@@ -26,6 +26,7 @@ public class UserServices {
     private static UserServices instance = null;
 
     private User currentUser;
+    private DocumentReference currentUserReference;
 
     public static UserServices getInstance() {
         if (instance == null)
@@ -40,19 +41,20 @@ public class UserServices {
         if (FirebaseAuth.getInstance().getCurrentUser() == null) {
             throw new RuntimeException("No user is logged in");
         }
-        FirebaseFirestore.getInstance().collection("users")
-                .document(FirebaseAuth.getInstance().getCurrentUser().getUid())
+        getCurrentUserReference()
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                         final User user = task.getResult().toObject(User.class);
-                        //for(DocumentReference ref: (List<DocumentReference>)task.getResult().get("friends")) {
-                        //        user.addFriend(ref);
-                        //}
                         currentUser = user;
                     }
                 });
+    }
+
+    public DocumentReference getCurrentUserReference() {
+        return FirebaseFirestore.getInstance().collection("users")
+                .document(FirebaseAuth.getInstance().getCurrentUser().getUid());
     }
 
     public User getCurrentUser() {

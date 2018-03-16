@@ -1,9 +1,11 @@
 package saar.roy.matchpoint.data;
 
 import com.google.firebase.database.ServerValue;
+import com.google.firebase.firestore.DocumentReference;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -13,13 +15,16 @@ import java.util.Map;
 
 public class Match {
     private List<MatchParticipation> participations;
-    private Court court;
-    private Map<String,String> time;
+    private DocumentReference court;
 
-    public Match(List<MatchParticipation> participations, Court court) {
+    public Match(List<MatchParticipation> participations, DocumentReference court) {
         this.participations = participations;
         this.court = court;
-        this.time = ServerValue.TIMESTAMP;
+    }
+
+
+    public DocumentReference getCourt() {
+        return court;
     }
 
     public List<MatchParticipation> getParticipations() {
