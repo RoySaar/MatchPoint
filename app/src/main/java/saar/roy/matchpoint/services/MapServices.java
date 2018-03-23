@@ -6,6 +6,7 @@ import android.util.Log;
 
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.ServerValue;
 import com.google.firebase.firestore.DocumentReference;
@@ -20,6 +21,7 @@ import java.util.Map;
 
 import saar.roy.matchpoint.data.Court;
 import saar.roy.matchpoint.data.Match;
+import saar.roy.matchpoint.data.MatchParticipation;
 
 /**
  * Created by roy on 22/01/18.
@@ -61,8 +63,18 @@ public class MapServices {
 
     ;
 
-    public void saveMatch(Match match) {
-        db.collection("matches").add(match);
+    public void saveMatch(final Match match) {
+        db.collection("matches").add(match).addOnSuccessListener(
+                new OnSuccessListener<DocumentReference>() {
+            @Override
+            public void onSuccess(DocumentReference documentReference) {
+                for (MatchParticipation participation:match.getParticipations()) {
+                    db.collection("matchInvites").add(
+                            new MatchInvite(participation.getUser(),documentReference));
+                }
+            }
+        });
+
     }
 
 }

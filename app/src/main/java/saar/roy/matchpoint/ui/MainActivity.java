@@ -6,9 +6,15 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -58,16 +64,39 @@ public class MainActivity extends AppCompatActivity {
         changeFragment(MapFragment.newInstance());
         BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-        notificationListenerRegistration = FirebaseFirestore.getInstance().collection("matchNotifications")
+        notificationListenerRegistration = FirebaseFirestore.getInstance().collection("matchInvites")
                 .whereEqualTo("user", UserServices.getInstance().getCurrentUserReference())
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
-                        /*NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this, CHANNEL_ID)
-                                .setSmallIcon(R.drawable.marker_icon)
-                                .setContentTitle(textTitle)
-                                .setContentText(textContent)
-                                .setPriority(NotificationCompat.PRIORITY_DEFAULT);*/
+                        for (final DocumentChange documentChange:documentSnapshots.getDocumentChanges()) {
+                            Log.d("Reference",documentChange.getDocument().getReference().getPath());
+                            if (documentChange.getType() == DocumentChange.Type.ADDED) {
+                                documentChange.getDocument().getDocumentReference("match").get()
+                                        .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                    @Override
+                                    public void onSuccess(DocumentSnapshot matchSnapshot) {
+                                        matchSnapshot.getDocumentReference("court").get().
+                                                addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                            @Override
+                                            public void onSuccess(DocumentSnapshot courtSnapshot) {
+                                                NotificationCompat.Builder mBuilder =
+                                                        new NotificationCompat.Builder(MainActivity.this)
+                                                                .setSmallIcon(R.drawable.pin_ico)
+                                                                .setContentTitle("Match Invite")
+                                                                .setContentText(courtSnapshot.getString("name"))
+                                                                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+                                                NotificationManagerCompat notificationManager = NotificationManagerCompat
+                                                        .from(MainActivity.this);
+                                                notificationManager.notify(0, mBuilder.build());
+                                            }
+                                        });
+                                    }
+                                });
+
+                            }
+                            documentChange.getDocument().getReference().delete();
+                        }
                     }
                 });
     }
