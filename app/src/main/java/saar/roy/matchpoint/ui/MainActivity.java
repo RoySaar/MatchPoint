@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
                                                                 .setSmallIcon(R.drawable.pin_ico)
                                                                 .setContentTitle("Match Invite")
                                                                 .setContentText(courtSnapshot.getString("name"))
-                                                                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+                                                                   .setPriority(NotificationCompat.PRIORITY_DEFAULT);
                                                 NotificationManagerCompat notificationManager = NotificationManagerCompat
                                                         .from(MainActivity.this);
                                                 notificationManager.notify(0, mBuilder.build());

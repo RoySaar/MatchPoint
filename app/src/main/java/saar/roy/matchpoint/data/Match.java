@@ -16,15 +16,20 @@ import java.util.Map;
 public class Match {
     private List<MatchParticipation> participations;
     private DocumentReference court;
+    private Date date;
 
-    public Match(List<MatchParticipation> participations, DocumentReference court) {
+    public Match(List<MatchParticipation> participations, DocumentReference court,Date date) {
         this.participations = participations;
         this.court = court;
+        this.date = date;
     }
-
 
     public DocumentReference getCourt() {
         return court;
+    }
+
+    public Date getDate() {
+        return date;
     }
 
     public List<MatchParticipation> getParticipations() {

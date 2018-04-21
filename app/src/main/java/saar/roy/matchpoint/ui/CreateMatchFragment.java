@@ -1,62 +1,55 @@
 package saar.roy.matchpoint.ui;
 
-import android.animation.Animator;
 import android.annotation.SuppressLint;
-import android.content.DialogInterface;
+import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.DialogFragment;
-import android.text.method.HideReturnsTransformationMethod;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.firestore.DocumentReference;
 
-import java.security.Permission;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
-import java.util.Objects;
+import java.util.GregorianCalendar;
+import java.util.TimeZone;
 
 import saar.roy.matchpoint.data.Match;
 import saar.roy.matchpoint.data.MatchParticipation;
 import saar.roy.matchpoint.R;
-import saar.roy.matchpoint.data.Team;
 import saar.roy.matchpoint.data.User;
-import saar.roy.matchpoint.services.Callback;
 import saar.roy.matchpoint.services.MapServices;
-import saar.roy.matchpoint.services.SearchServices;
 import saar.roy.matchpoint.services.UserServices;
-
-import static android.support.design.widget.Snackbar.LENGTH_SHORT;
 
 /**
  * Created by Eidan on 1/26/2018.
  */
 
-public class CreateMatchDialogFragment extends DialogFragment implements View.OnClickListener {
+public class CreateMatchFragment extends Fragment implements View.OnClickListener {
 
     private String courtName;
     private String courtDescription;
     private User currentUser;
     private DocumentReference courtReference;
-    private
-    ParticipationAdapter participationAdapter;
-    public static final int DIALOG_ANIM_DURATION = 500;
+    private ParticipationAdapter participationAdapter;
+    private Calendar matchDate;
 
 
-    static public CreateMatchDialogFragment newInstance() {
+    static public CreateMatchFragment newInstance() {
         Bundle args = new Bundle();
-        CreateMatchDialogFragment fragment = new CreateMatchDialogFragment();
+        CreateMatchFragment fragment = new CreateMatchFragment();
         fragment.setArguments(args);
         return fragment;
     }
@@ -65,7 +58,6 @@ public class CreateMatchDialogFragment extends DialogFragment implements View.On
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //setCancelable(false);
-        setStyle(STYLE_NO_TITLE, 0);
     }
 
     @SuppressLint("ResourceAsColor")
@@ -79,7 +71,6 @@ public class CreateMatchDialogFragment extends DialogFragment implements View.On
         v.<ListView>findViewById(R.id.lvParticipations).setAdapter(participationAdapter);
         v.<TextView>findViewById(R.id.tvCourtName).setText(courtName);
         v.<TextView>findViewById(R.id.tvCourtDescription).setText(courtDescription);
-        v.findViewById(R.id.tpMatchDialog);
         v.<Button>findViewById(R.id.submitBtn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -92,7 +83,7 @@ public class CreateMatchDialogFragment extends DialogFragment implements View.On
         v.<Button>findViewById(R.id.cancelBtn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getDialog().dismiss();
+                // TODO return to map
             }
         });
         CollapsingToolbarLayout mCollapsingToolbarLayout = v.findViewById(R.id.collapsing);
@@ -107,49 +98,33 @@ public class CreateMatchDialogFragment extends DialogFragment implements View.On
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(),
                 android.R.layout.simple_dropdown_item_1line, currentUser.getFriendNames());
         v.<AutoCompleteTextView>findViewById(R.id.actvSearchFriends).setAdapter(adapter);
+        matchDate = new GregorianCalendar(TimeZone.getDefault());
+        TextView tvMatchDialog = v.findViewById(R.id.tvMatchDate);
+        tvMatchDialog.setText(SimpleDateFormat.getDateInstance().format(matchDate.getTime()));
+        tvMatchDialog.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showDateDialog();
+            }
+        });
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getContext()
+                ,android.R.layout.simple_list_item_1,new ArrayList<String>());
+        arrayAdapter.add("hello");
+        Spinner spinner = v.findViewById(R.id.spnrMatchTime);
+        spinner.setAdapter(arrayAdapter);
         return v;
     }
 
-
-    public void setDialogAnimations() {
-        getDialog().setOnShowListener(new DialogInterface
-                .OnShowListener() {
+    public void showDateDialog(){
+        DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
             @Override
-            public void onShow(DialogInterface dialog) {
-                final View view = getDialog().getWindow()
-                        .getDecorView();
-                final int centerX = view.getWidth() / 2;
-                final int centerY = view.getHeight() / 2;
-                float startRadius = 20;
-                float endRadius = view.getHeight();
-                Animator animator = ViewAnimationUtils.createCircularReveal(view
-                        , centerX
-                        , centerY
-                        , startRadius
-                        , endRadius);
-                animator.setDuration(DIALOG_ANIM_DURATION);
-                animator.start();
+            public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+                matchDate.set(year,month,day);
+                TextView tvMatchDialog = getView().findViewById(R.id.tvMatchDate);
+                tvMatchDialog.setText(SimpleDateFormat.getDateInstance().format(matchDate.getTime()));
             }
-        });
-        getDialog().setOnDismissListener(new DialogInterface
-                .OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface dialog) {
-                final View view = getDialog().getWindow()
-                        .getDecorView();
-                final int centerX = view.getWidth() / 2;
-                final int centerY = view.getHeight() / 2;
-                float startRadius = view.getHeight();
-                float endRadius = 0;
-                Animator animator = ViewAnimationUtils.createCircularReveal(view
-                        , centerX
-                        , centerY
-                        , startRadius
-                        , endRadius);
-                animator.setDuration(DIALOG_ANIM_DURATION);
-                animator.start();
-            }
-        });
+        },matchDate.get(Calendar.YEAR), matchDate.get(Calendar.MONTH),matchDate.get(Calendar.DAY_OF_MONTH));
+        datePickerDialog.show();
     }
 
     public void setCourt(String courtName, String courtDescription, DocumentReference ref) {
@@ -182,8 +157,8 @@ public class CreateMatchDialogFragment extends DialogFragment implements View.On
     public void saveMatch() {
         MapServices.getInstance().saveMatch(
                 new Match(participationAdapter.getParticipations(),
-                        courtReference)
+                        courtReference,matchDate.getTime())
         );
-        getDialog().dismiss();
+        // TODO return to map
     }
 }

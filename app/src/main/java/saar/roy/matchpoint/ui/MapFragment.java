@@ -1,10 +1,8 @@
 package saar.roy.matchpoint.ui;
 
 import android.Manifest;
-import android.animation.Animator;
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -17,7 +15,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
 
 import com.google.android.gms.maps.CameraUpdate;
@@ -30,7 +27,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.firebase.firestore.DocumentReference;
 
-import java.util.List;
 import java.util.Map;
 
 import saar.roy.matchpoint.R;
@@ -103,11 +99,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             @Override
             // Show the create match dialog
             public void onInfoWindowClick(Marker marker) {
-                final CreateMatchDialogFragment matchDialogFragment = CreateMatchDialogFragment
+                final CreateMatchFragment matchDialogFragment = CreateMatchFragment
                         .newInstance();
                 matchDialogFragment.setCourt(marker.getTitle(), marker.getSnippet(),(DocumentReference)marker.getTag());
                 FragmentManager fm = getActivity().getSupportFragmentManager();
-                matchDialogFragment.show(fm, "Dialog");
+                ((MainActivity)getActivity()).changeFragment(matchDialogFragment);
             }
         });
         moveCameraToCurrentLocation();
