@@ -28,10 +28,12 @@
     <!-- Strings related to create match dialog -->
     <string name="court_name_placeholder">שם המגרש</string>
     <string name="court_desc_placeholder">תיאור המגרש</string>
+    <string name="select_time">בחר תאריך ושעה</string>
     <string name="search_friends">חפש חברים</string>
     <string name="court_title_placholder">הזמן חברים</string>
     <string name="cancel">בטל</string>
     <string name="order">הזמן</string>
+    <string name="court_image">Court Image</string>
 
     <!-- String related to map -->
     <string name="search_courts">חפש מגרשים</string>
@@ -40,7 +42,7 @@
     <string name="last_matches">משחקים אחרונים</string>
     <string name="friends">חברים</string>
     <string name="username_placeholder">שם משתמש</string>
-    <string name="user_info_placeholder">18W-0L</string>
+    <string name="user_info_placeholder">Jan 1, 1970</string>
 
     <!-- Activity titles -->
     <string name="title_activity_main">Map</string>
@@ -49,9 +51,8 @@
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
     <string name="profile_picture">Profile Picture</string>
-    <string name="court_image">Court Image</string>
     <string name="name_placeholder">שם כלשהו</string>
-    <string name="select_time">בחר שעה</string>
+    <string name="member_since">רשום מאז</string>
 
 
 </resources>

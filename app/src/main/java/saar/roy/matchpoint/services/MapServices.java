@@ -14,7 +14,9 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -61,7 +63,39 @@ public class MapServices {
                 });
     }
 
-    ;
+    public void getHours(final Callback<List<String>> callback, final Date date) {
+        final String opens= "0";
+        final String closes =  "24";
+        db.collection("matches")
+                .whereEqualTo("date",date)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (!task.getResult().isEmpty()) {
+                            ArrayList<String> hours = new ArrayList<>();
+                            for (DocumentSnapshot document:task.getResult()) {
+                                Date time = document.getDate("date");
+                                hours.add(SimpleDateFormat
+                                        .getDateInstance(SimpleDateFormat.HOUR_OF_DAY0_FIELD).format(time));
+                            }
+                            ArrayList<String> available = new ArrayList<>();
+                            for (int i = Integer.parseInt(opens); i < Integer.parseInt(closes); i++) {
+                                if (!hours.contains(String.valueOf(i)))
+                                    available.add(String.valueOf(i));
+                            }
+                            callback.onCallback(available);
+                        }
+                        else {
+                            ArrayList<String> available = new ArrayList<>();
+                            for (int i = Integer.parseInt(opens); i < Integer.parseInt(closes); i++) {
+                                available.add(String.valueOf(i));
+                            }
+                            callback.onCallback(available);
+                        }
+                    }
+                });
+    }
 
     public void saveMatch(final Match match) {
         db.collection("matches").add(match).addOnSuccessListener(

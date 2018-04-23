@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="360dp"
     android:layout_height="510dp">
 
@@ -13,7 +14,7 @@
         <android.support.v7.widget.CardView
             android:id="@+id/cardProfile"
             android:layout_width="340dp"
-            android:layout_height="200dp"
+            android:layout_height="214dp"
             android:layout_marginTop="20dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -44,12 +45,11 @@
                         android:layout_width="96dp"
                         android:layout_height="96dp"
                         android:layout_gravity="center_horizontal"
-                        android:layout_marginEnd="8dp"
-                        android:layout_marginStart="8dp"
                         android:layout_marginTop="8dp"
-                        android:background="@drawable/stroke"
                         android:contentDescription="@string/profile_picture"
-                        app:srcCompat="@drawable/pin_ico" />
+                        app:srcCompat="@drawable/tennis_player_circle"
+                        tools:layout_editor_absoluteX="191dp"
+                        tools:layout_editor_absoluteY="0dp" />
                 </FrameLayout>
 
                 <TextView
@@ -57,7 +57,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="4dp"
                     android:fontFamily="@font/assistant_bold"
                     android:text="@string/username_placeholder"
                     android:textColor="@color/textOnP"
@@ -68,17 +68,35 @@
                     app:layout_constraintTop_toBottomOf="@+id/flProfilePicHolder" />
 
                 <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layoutDirection="rtl"
+                    android:text="@string/member_since"
+                    android:textDirection="rtl"
+                    app:layout_constraintBottom_toTopOf="@+id/tvUserInfo"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvUsername" />
+
+                <TextView
                     android:id="@+id/tvUserInfo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
+                    android:layout_marginBottom="8dp"
                     android:fontFamily="@font/assistant_semibold"
                     android:text="@string/user_info_placeholder"
                     android:textColor="@color/textOnP"
                     android:textSize="24sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tvUsername" />
+                    app:layout_constraintTop_toBottomOf="@+id/tvUsername"
+                    app:layout_constraintVertical_bias="1.0" />
 
             </android.support.constraint.ConstraintLayout>
         </android.support.v7.widget.CardView>
@@ -171,8 +189,8 @@
 
             <ListView
                 android:id="@+id/lvFriends"
-                android:layout_width="368dp"
-                android:layout_height="171dp"
+                android:layout_width="340dp"
+                android:layout_height="200dp"
                 android:layout_marginBottom="200dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"

@@ -39,7 +39,7 @@
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fabDialog"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
         android:clickable="true"
@@ -116,25 +116,33 @@
                             android:textSize="24sp" />
 
 
-                        <View
-                            android:id="@+id/divCreateMatchTime"
+                        <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:layout_gravity="center_horizontal"
-                            android:layout_marginTop="8dp"
-                            android:alpha="0.5"
-                            android:background="@android:color/darker_gray" />
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal">
 
-                        <TextView
-                            android:id="@+id/tvMatchDate"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="TextView" />
+                            <Spinner
+                                android:id="@+id/spnrMatchTime"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="8dp"
+                                android:layout_weight="1"
+                                android:dropDownWidth="wrap_content" />
 
-                        <Spinner
-                            android:id="@+id/spnrMatchTime"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content" />
+                            <TextView
+                                android:id="@+id/tvMatchDate"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="8dp"
+                                android:layout_weight="1"
+                                android:gravity="start"
+                                android:layoutDirection="ltr"
+                                android:text="TextView"
+                                android:textColor="@color/textOnP"
+                                android:textDirection="ltr"
+                                android:textSize="18sp" />
+
+                        </LinearLayout>
 
                         <android.support.v7.widget.AppCompatTextView
                             android:id="@+id/tvAddFriends"
@@ -145,6 +153,15 @@
                             android:text="@string/court_title_placholder"
                             android:textColor="@color/textOnP"
                             android:textSize="24sp" />
+
+                        <View
+                            android:id="@+id/divCreateMatchTime"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_marginTop="8dp"
+                            android:alpha="0.5"
+                            android:background="@android:color/darker_gray" />
 
                         <ListView
                             android:id="@+id/lvParticipations"

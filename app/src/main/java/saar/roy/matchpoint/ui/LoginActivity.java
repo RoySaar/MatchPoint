@@ -1,5 +1,6 @@
 package saar.roy.matchpoint.ui;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
@@ -10,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -30,18 +32,26 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth.AuthStateListener mAuthListener;
     private AuthenticationServices authServices;
     public static final String LOG_AUTH_TAG = "FirebaseAuth";
-    public static final String PREFS_NAME = "MyPrefsFile";
-    private static final String PREF_EMAIL = "email";
-    private static final String PREF_PASSWORD = "password";
-    private android.app.AlertDialog loadingDialog;
+    private SpotsDialogHandler dialogHandler;
+    private SharedPreferences loginPreferences;
+    private SharedPreferences.Editor loginPrefsEditor;
 
 
+
+    @SuppressLint("CommitPrefEdits")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getSupportActionBar().hide();
         setContentView(R.layout.activity_login);
-        loadingDialog = new SpotsDialog(LoginActivity.this,R.style.LoginDialog);
+        dialogHandler = SpotsDialogHandler.getInstance();
+        dialogHandler.setText("Logging in...");
+        loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
+        loginPrefsEditor = loginPreferences.edit();
+        if (loginPreferences.getBoolean("saveLogin", false)){
+            ((TextView)(findViewById(R.id.tvEmail))).setText(loginPreferences.getString("email", ""));
+            ((CheckBox)(findViewById(R.id.cbRememberMe))).setChecked(true);
+        }
         authServices = new AuthenticationServices();
         mAuth = FirebaseAuth.getInstance();
         mAuthListener = new FirebaseAuth.AuthStateListener() {
@@ -61,37 +71,73 @@ public class LoginActivity extends AppCompatActivity {
         };
     }
 
-    private void InitilizeRememberMe() {
-        SharedPreferences pref = getSharedPreferences(PREFS_NAME,MODE_PRIVATE);
-        String email = pref.getString(PREF_EMAIL, "");
-        String password = pref.getString(PREF_PASSWORD, "");
-        if (!(email.equals(""))) {
-            ((EditText)findViewById(R.id.tvEmail)).setText(email);
-            ((EditText)findViewById(R.id.tvPassword)).setText(password);
-            ((CheckBox)findViewById(R.id.cbRememberMe)).setChecked(true);
+    public void OnSigninButtonClick(View v) {
+        String email = ((EditText)findViewById(R.id.tvEmail)).getText().toString().trim();
+        String password = ((EditText)findViewById(R.id.tvPassword)).getText().toString().trim();
+        Verification verification = AuthenticationServices.verifyEmailAndPassword(email,password);
+        if (verification == Verification.EITHER_IS_NULL)
+            // Email or password are empty
+            Toast.makeText(this,"Please fill in both email and password",Toast.LENGTH_SHORT).show();
+        else {
+            if (((CheckBox)(findViewById(R.id.cbRememberMe))).isChecked()) {
+                loginPrefsEditor.putBoolean("saveLogin", true);
+                loginPrefsEditor.putString("email", email);
+                loginPrefsEditor.commit();
+            } else {
+                loginPrefsEditor.clear();
+                loginPrefsEditor.commit();
+            }
+            dialogHandler.show(LoginActivity.this,R.style.LoginDialog);
+            signIn(email, password);
         }
     }
 
-    @Override
-    protected void onResume() {
-        // Hide the loading dialog
-        if(loadingDialog.isShowing())
-            loadingDialog.hide();
-        super.onResume();
+    public void OnGuestSigninButtonClick(View v) {
+        dialogHandler.show(LoginActivity.this);
+        mAuth.signInAnonymously()
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d(LOG_AUTH_TAG, "signInAnonymously:success");
+                            startActivity(new Intent(LoginActivity.this,MainActivity.class));
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Log.w(LOG_AUTH_TAG, "signInAnonymously:failure", task.getException());
+                            Toast.makeText(LoginActivity.this, "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+
+                        // ...
+                    }
+                });
+
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        mAuth.addAuthStateListener(mAuthListener);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        if (mAuthListener != null) {
-            mAuth.removeAuthStateListener(mAuthListener);
+    public void OnSignupButtonClick(View v) {
+        String email = ((EditText)findViewById(R.id.tvEmail)).getText().toString().trim();
+        String password = ((EditText)findViewById(R.id.tvPassword)).getText().toString().trim();
+        Verification verification = AuthenticationServices.verifyEmailAndPassword(email,password);
+        if (verification == Verification.VALID)
+            // Valid credentials, sign up
+            signUp(email,password);
+        else {
+            // Display error message accordingly
+            String message = "Generic sign up error";
+            switch (verification) {
+                case EMAIL_NOT_VALID:
+                    message = "The email address is invalid";
+                    break;
+                // case PASSWORD_TOO_SHORT:
+                //  message = "Password needs to be at least 8 characters long";
+                // break;
+                case EITHER_IS_NULL:
+                    message = "Please fill in both email and password";
+            }
+            Toast.makeText(this,message,Toast.LENGTH_SHORT).show();
         }
+
     }
 
     public void signUp(String email, String password) {
@@ -133,86 +179,27 @@ public class LoginActivity extends AppCompatActivity {
                 });
     }
 
-    public void OnSignupButtonClick(View v) {
-        String email = ((EditText)findViewById(R.id.tvEmail)).getText().toString().trim();
-        String password = ((EditText)findViewById(R.id.tvPassword)).getText().toString().trim();
-        Verification verification = authServices.verifyEmailAndPassword(email,password);
-        if (verification == Verification.VALID)
-            // Valid credentials, sign up
-            signUp(email,password);
-        else {
-            // Display error message accordingly
-            String message = "Generic sign up error";
-            switch (verification) {
-                case EMAIL_NOT_VALID:
-                    message = "The email address is invalid";
-                    break;
-                // case PASSWORD_TOO_SHORT:
-                //  message = "Password needs to be at least 8 characters long";
-                // break;
-                case EITHER_IS_NULL:
-                    message = "Please fill in both email and password";
-            }
-            Toast.makeText(this,message,Toast.LENGTH_SHORT).show();
-        }
-
+    @Override
+    protected void onResume() {
+        // Hide the loading dialog
+        if(dialogHandler.isShowing())
+            dialogHandler.hide();
+        super.onResume();
     }
 
-    public void OnSigninButtonClick(View v) {
-        String email = ((EditText)findViewById(R.id.tvEmail)).getText().toString().trim();
-        String password = ((EditText)findViewById(R.id.tvPassword)).getText().toString().trim();
-        Verification verification = authServices.verifyEmailAndPassword(email,password);
-        if (verification == Verification.EITHER_IS_NULL)
-            // Email or password are empty
-            Toast.makeText(this,"Please fill in both email and password",Toast.LENGTH_SHORT).show();
-        else {
-            loadingDialog.show();
-            signIn(email, password);
-        }
+    @Override
+    public void onStart() {
+        super.onStart();
+        mAuth.addAuthStateListener(mAuthListener);
     }
 
-    public void OnGuestSigninButtonClick(View v) {
-        loadingDialog.show();
-        mAuth.signInAnonymously()
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d(LOG_AUTH_TAG, "signInAnonymously:success");
-                            startActivity(new Intent(LoginActivity.this,MainActivity.class));
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Log.w(LOG_AUTH_TAG, "signInAnonymously:failure", task.getException());
-                            Toast.makeText(LoginActivity.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
-                        }
-
-                        // ...
-                    }
-                });
-
-    }
-
-    private void rememberMe(String email, String password) {
-        if ( ((CheckBox)findViewById(R.id.cbRememberMe)).isChecked() ) {
-            // Remember me
-            getSharedPreferences(PREFS_NAME, MODE_PRIVATE)
-                    .edit()
-                    .putString(PREF_EMAIL, email)
-                    .putString(PREF_PASSWORD, password)
-                    .apply();
-        }
-        else {
-            // Don't remember me
-            getSharedPreferences(PREFS_NAME,MODE_PRIVATE)
-                    .edit()
-                    .putString(PREF_EMAIL, "")
-                    .putString(PREF_PASSWORD, "")
-                    .apply();
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (mAuthListener != null) {
+            mAuth.removeAuthStateListener(mAuthListener);
         }
     }
-
 }
 
 

@@ -1,11 +1,9 @@
 package saar.roy.matchpoint.data;
 
-import android.widget.ListView;
-
-import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.firestore.DocumentReference;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,11 +15,15 @@ import java.util.Map;
 public class User {
     private Map<String ,DocumentReference> friends;
     private String name;
+    private Date dateJoined;
 
     public User() {
         //this.friends = new HashMap<>();
     }
 
+    public Date getDateJoined() {
+        return dateJoined;
+    }
 
     public String getName() {
         return name;

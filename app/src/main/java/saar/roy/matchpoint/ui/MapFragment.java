@@ -16,6 +16,7 @@ import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -29,6 +30,7 @@ import com.google.firebase.firestore.DocumentReference;
 
 import java.util.Map;
 
+import dmax.dialog.SpotsDialog;
 import saar.roy.matchpoint.R;
 import saar.roy.matchpoint.data.Court;
 import saar.roy.matchpoint.services.Callback;
@@ -45,6 +47,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private LocationManager locationManager;
     private static final long MIN_TIME = 400;
     private static final float MIN_DISTANCE = 1000;
+    private SpotsDialogHandler dialogHandler;
 
     public static MapFragment newInstance() {
         return new MapFragment();
@@ -52,6 +55,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        dialogHandler = SpotsDialogHandler.getInstance();
         super.onCreate(savedInstanceState);
     }
 
@@ -97,12 +101,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         // Snippet on click
         mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
             @Override
-            // Show the create match dialog
+            // Show the create match fragment
             public void onInfoWindowClick(Marker marker) {
                 final CreateMatchFragment matchDialogFragment = CreateMatchFragment
                         .newInstance();
                 matchDialogFragment.setCourt(marker.getTitle(), marker.getSnippet(),(DocumentReference)marker.getTag());
                 FragmentManager fm = getActivity().getSupportFragmentManager();
+                dialogHandler.show(getContext());
                 ((MainActivity)getActivity()).changeFragment(matchDialogFragment);
             }
         });
@@ -120,6 +125,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onResume() {
         mapView.onResume();
+        dialogHandler = SpotsDialogHandler.getInstance();
+        if (dialogHandler.isShowing())
+            dialogHandler.hide();
         super.onResume();
     }
     @Override

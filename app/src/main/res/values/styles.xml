@@ -33,6 +33,13 @@
         <item name="DialogSpotCount">4</item>
     </style>
 
+    <style name="LoadingDialog" parent="android:Theme.DeviceDefault.Dialog">
+        <item name="DialogTitleAppearance">@android:style/TextAppearance.Medium</item>
+        <item name="DialogTitleText">Loading…</item>
+        <item name="DialogSpotColor">@color/colorAccent</item>
+        <item name="DialogSpotCount">4</item>
+    </style>
+
     <style name="TitleBarCollapsed">
         <item name="android:textColor">@color/textOnP</item>
         <item name="fontFamily">@font/assistant_bold</item>
