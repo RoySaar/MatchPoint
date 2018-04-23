@@ -39,7 +39,7 @@
     <string name="search_courts">חפש מגרשים</string>
 
     <!-- Strings related to dashboard -->
-    <string name="last_matches">משחקים אחרונים</string>
+    <string name="last_matches">משחקים קרובים</string>
     <string name="friends">חברים</string>
     <string name="username_placeholder">שם משתמש</string>
     <string name="user_info_placeholder">Jan 1, 1970</string>

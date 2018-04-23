@@ -119,6 +119,22 @@
             app:layout_constraintTop_toBottomOf="@+id/cardProfile"
             app:layout_constraintVertical_bias="0.085" />
 
+        <Button
+            android:id="@+id/btnRefresh"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/ic_refresh"
+            app:layout_constraintBottom_toTopOf="@+id/cardLastMatches"
+            app:layout_constraintEnd_toStartOf="@+id/tvLastMatches"
+            app:layout_constraintHorizontal_bias="0.07"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cardProfile"
+            app:layout_constraintVertical_bias="0.988" />
+
         <android.support.v7.widget.CardView
             android:id="@+id/cardLastMatches"
             android:layout_width="340dp"
@@ -130,22 +146,11 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvLastMatches">
 
-            <ListView
-                android:id="@+id/lvLastMatches"
+            <ExpandableListView
+                android:id="@+id/elvMatches"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginBottom="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:layoutDirection="rtl"
-                android:textDirection="rtl"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvLastMatches"
-                app:layout_constraintVertical_bias="0.0" />
+                android:layoutDirection="rtl" />
         </android.support.v7.widget.CardView>
 
         <View

@@ -12,10 +12,14 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
+import saar.roy.matchpoint.data.Match;
+import saar.roy.matchpoint.data.MatchParticipation;
 import saar.roy.matchpoint.data.User;
 
 /**
@@ -24,9 +28,8 @@ import saar.roy.matchpoint.data.User;
 
 public class UserServices {
     private static UserServices instance = null;
-
+    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private User currentUser;
-    private DocumentReference currentUserReference;
 
     public static UserServices getInstance() {
         if (instance == null)
@@ -50,6 +53,39 @@ public class UserServices {
                         currentUser = user;
                     }
                 });
+    }
+
+    //TODO: fix this (fetching matches, no names from participation)
+    public void fetchUpcomingMatches(final Callback<ArrayList<Match>> callback) {
+        if (FirebaseAuth.getInstance().getCurrentUser() == null) {
+            throw new RuntimeException("No user is logged in");
+        }
+        final DocumentReference userReference = getCurrentUserReference();
+        db.collection("matches")
+                .whereGreaterThanOrEqualTo("date", Calendar.getInstance().getTime())
+                .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot documentSnapshots) {
+                if (documentSnapshots.isEmpty()) {
+                    callback.onCallback(null);
+                }
+                else {
+                    final ArrayList<Match> matches = new ArrayList<>();
+                    final ArrayList<Match> returnMatches = new ArrayList<>();
+                    for (DocumentSnapshot matchSnapshot:documentSnapshots.getDocuments()) {
+                        matches.add(matchSnapshot.toObject(Match.class));
+                    }
+                    for (Match match:matches) {
+                        for (MatchParticipation participation:match.getParticipations()) {
+                            if (participation.getUser() == userReference){
+                                returnMatches.add(match);
+                            }
+                        }
+                    }
+                    callback.onCallback(returnMatches);
+                }
+            }
+        });
     }
 
     public DocumentReference getCurrentUserReference() {

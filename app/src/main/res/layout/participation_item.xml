@@ -4,25 +4,35 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layoutDirection="rtl"
-    android:orientation="horizontal"
-    android:textDirection="rtl">
+    android:orientation="horizontal">
 
-    <TextView
-        android:id="@+id/tvParticipaitonName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_weight="1"
-        android:fontFamily="@font/assistant_semibold"
-        android:textColor="@color/textOnP"
-        android:textSize="18sp" />
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1">
 
-    <ImageView
-        android:id="@+id/ivConfirmed"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:layout_marginTop="2dp"
-        android:layout_weight="1"
-        android:src="@drawable/unconfirmed" />
+        <ImageView
+            android:id="@+id/ivConfirmed"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginEnd="36dp"
+            android:layout_marginTop="4dp"
+            android:layout_weight="1"
+            android:src="@drawable/unconfirmed"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvParticipaitonName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="40dp"
+            android:layout_weight="1"
+            android:fontFamily="@font/assistant_semibold"
+            android:textColor="@color/textOnP"
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </android.support.constraint.ConstraintLayout>
+
 </LinearLayout>
