@@ -26,6 +26,9 @@ import saar.roy.matchpoint.R;
 import saar.roy.matchpoint.services.UserServices;
 import saar.roy.matchpoint.services.Verification;
 
+import static saar.roy.matchpoint.services.Verification.EITHER_IS_NULL;
+import static saar.roy.matchpoint.services.Verification.EMAIL_NOT_VALID;
+
 public class LoginActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
@@ -75,7 +78,7 @@ public class LoginActivity extends AppCompatActivity {
         String email = ((EditText)findViewById(R.id.tvEmail)).getText().toString().trim();
         String password = ((EditText)findViewById(R.id.tvPassword)).getText().toString().trim();
         Verification verification = AuthenticationServices.verifyEmailAndPassword(email,password);
-        if (verification == Verification.EITHER_IS_NULL)
+        if (verification == EITHER_IS_NULL)
             // Email or password are empty
             Toast.makeText(this,"Please fill in both email and password",Toast.LENGTH_SHORT).show();
         else {
@@ -124,41 +127,19 @@ public class LoginActivity extends AppCompatActivity {
             signUp(email,password);
         else {
             // Display error message accordingly
-            String message = "Generic sign up error";
             switch (verification) {
                 case EMAIL_NOT_VALID:
-                    message = "The email address is invalid";
+                    Toast.makeText(this,EMAIL_NOT_VALID.toString(),Toast.LENGTH_SHORT).show();
                     break;
                 // case PASSWORD_TOO_SHORT:
                 //  message = "Password needs to be at least 8 characters long";
                 // break;
                 case EITHER_IS_NULL:
-                    message = "Please fill in both email and password";
+                    Toast.makeText(this,EITHER_IS_NULL.toString(),Toast.LENGTH_SHORT).show();
             }
-            Toast.makeText(this,message,Toast.LENGTH_SHORT).show();
+
         }
 
-    }
-
-    public void signUp(String email, String password) {
-        mAuth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        Log.d(LOG_AUTH_TAG, "createUserWithEmail:onComplete:" + task.isSuccessful());
-                        // If sign in fails, display a message to the user. If sign in succeeds
-                        // the auth state listener will be notified and logic to handle the
-                        // signed in user can be handled in the listener.
-                        if (!task.isSuccessful()) {
-                            Log.d(LOG_AUTH_TAG, "createUserWithEmail:onComplete:" + task.getException());
-                            Toast.makeText(LoginActivity.this, R.string.auth_failed,
-                                    Toast.LENGTH_SHORT).show();
-                        }
-                        else {
-                            Toast.makeText(LoginActivity.this, "Sign up successful", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
     }
 
     public void signIn(String email, String password) {
@@ -174,6 +155,31 @@ public class LoginActivity extends AppCompatActivity {
                         else {
                             UserServices.getInstance().fetchCurrentUser();
                             startActivity(new Intent(LoginActivity.this,MainActivity.class));
+                        }
+                    }
+                });
+    }
+
+
+    public void signUp(final String email, final String password) {
+        mAuth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        Log.d(LOG_AUTH_TAG, "createUserWithEmail:onComplete:" + task.isSuccessful());
+                        // If sign in fails, display a message to the user. If sign in succeeds
+                        // the auth state listener will be notified and logic to handle the
+                        // signed in user can be handled in the listener.
+                        if (!task.isSuccessful()) {
+                            Log.d(LOG_AUTH_TAG, "createUserWithEmail:onComplete:" + task.getException());
+                            Toast.makeText(LoginActivity.this, R.string.auth_failed,
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                        else {
+                            // TODO: Finish the signup (login and such)
+                            Toast.makeText(LoginActivity.this, "Sign up successful", Toast.LENGTH_SHORT).show();
+                            FirebaseAuth.getInstance().signInWithEmailAndPassword(email,password);
+
                         }
                     }
                 });

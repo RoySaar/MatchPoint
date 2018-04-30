@@ -10,5 +10,13 @@ public enum Verification {
         public String toString() {
             return "Please fill in both email and password";
         }
-    },PASSWORD_TOO_SHORT,EMAIL_NOT_VALID,VALID
+    }
+    ,PASSWORD_TOO_SHORT
+    ,EMAIL_NOT_VALID {
+        @Override
+        public String toString() {
+            return "The email address is not valid";
+        }
+    }
+    ,VALID
 }

@@ -40,6 +40,7 @@ public class UserServices {
     private UserServices() {
     }
 
+    // Get current user as User
     public void fetchCurrentUser() {
         if (FirebaseAuth.getInstance().getCurrentUser() == null) {
             throw new RuntimeException("No user is logged in");
@@ -86,6 +87,17 @@ public class UserServices {
                 }
             }
         });
+    }
+
+    public void createUserInDatabase(final Callback callback, String name) {
+        db.collection("users").add(new User(name)).addOnSuccessListener(
+                new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        // TODO: Finish the signup
+                        callback.onCallback();
+                    }
+                });
     }
 
     public DocumentReference getCurrentUserReference() {

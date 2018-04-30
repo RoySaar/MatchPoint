@@ -83,7 +83,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         // Enable current location button
         mMap.setMyLocationEnabled(true);
         // Enable zoom controls
-        //mMap.getUiSettings().setZoomControlsEnabled(true);
+        mMap.getUiSettings().setZoomControlsEnabled(true);
         final Bitmap smallMarker = getMarkerIcon();
         Callback callback = new Callback<Map<DocumentReference,Court>>() {
             @Override
