@@ -59,7 +59,7 @@ public class DashboardFragment extends Fragment implements View.OnClickListener 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstance) {
-        dialogHandler.hide();
+        //dialogHandler.hide();
         View v = inflater.inflate(R.layout.fragment_dashboard, container, false);
         ((Button) v.findViewById(R.id.btnRefresh)).setOnClickListener(this);
         MatchListAdapter matchAdapter = new MatchListAdapter(getContext(),headerList,titleMap);
@@ -113,20 +113,4 @@ public class DashboardFragment extends Fragment implements View.OnClickListener 
         };
         UserServices.getInstance().fetchUpcomingMatches(callback);
     }
-
-    public void loadMatches(View v){
-
-      /*headerList.add("April 25, 2018");
-        headerList.add("April 26, 2018");
-        ArrayList<String> match1 = new ArrayList<>();
-        match1.add("ניסים גרמה");
-        ArrayList<String> match2 = new ArrayList<>();
-        match2.add("ניסים גרמי");
-        titleMap.put(headerList.get(0),match1);
-        titleMap.put(headerList.get(1),match2);
-        MatchListAdapter matchAdapter = new MatchListAdapter(getContext(),headerList,titleMap);
-        ((ExpandableListView)getView().findViewById(R.id.elvMatches)).setAdapter(matchAdapter);
-        */
-    }
-
 }

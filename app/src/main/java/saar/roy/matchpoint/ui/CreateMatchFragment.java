@@ -71,7 +71,7 @@ public class CreateMatchFragment extends Fragment implements View.OnClickListene
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container
             , Bundle savedInstanceState) {
-        dialogHandler.hide();
+        //dialogHandler.hide();
         final View v = inflater.inflate(R.layout.dialog_create_match, null);
         ArrayList<MatchParticipation> list = new ArrayList<>();
         participationAdapter = new ParticipationAdapter(getContext(), list);

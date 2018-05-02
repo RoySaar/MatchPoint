@@ -19,7 +19,6 @@ public class User {
     private Date dateJoined;
 
     public User() {
-        //this.friends = new HashMap<>();
     }
 
     public User(String name) {
@@ -40,8 +39,8 @@ public class User {
         return friends.get(name);
     }
 
-    public Map<String, DocumentReference> getFriends() {
-        return friends;
+    public HashMap<String, DocumentReference> getFriends() {
+        return (HashMap<String, DocumentReference>) friends;
     }
 
     public void addFriend(String name, DocumentReference ref) {

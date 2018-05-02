@@ -30,7 +30,7 @@ public class UserAdapter extends ArrayAdapter<User> {
             convertView = LayoutInflater.from(getContext())
                     .inflate(R.layout.user_item,parent,false);
         }
-        TextView tvSearchName = convertView.findViewById(R.id.tvUsername);
+        TextView tvSearchName = convertView.findViewById(R.id.tvSearchName);
         tvSearchName.setText(user.getName());
         return convertView;
     }

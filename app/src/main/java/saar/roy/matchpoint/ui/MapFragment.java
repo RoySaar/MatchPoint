@@ -126,8 +126,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     public void onResume() {
         mapView.onResume();
         dialogHandler = SpotsDialogHandler.getInstance();
-        if (dialogHandler.isShowing())
-            dialogHandler.hide();
+      //  if (dialogHandler.isShowing())
+      //      dialogHandler.hide();
         super.onResume();
     }
     @Override
