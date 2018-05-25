@@ -2,9 +2,13 @@ package saar.roy.matchpoint.ui;
 
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
+import android.content.ActivityNotFoundException;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
@@ -19,6 +23,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.firestore.DocumentReference;
 
 import java.text.SimpleDateFormat;
@@ -52,6 +57,7 @@ public class CreateMatchFragment extends Fragment implements View.OnClickListene
     private Calendar matchDate;
     private SpotsDialogHandler dialogHandler;
     private ArrayAdapter<String> spinnerAdapter;
+    private LatLng position;
 
 
     static public CreateMatchFragment newInstance() {
@@ -83,10 +89,7 @@ public class CreateMatchFragment extends Fragment implements View.OnClickListene
         v.<Button>findViewById(R.id.submitBtn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (participationAdapter.getCount() != 0)
-                    saveMatch();
-                else
-                    Toast.makeText(getContext(), "The Lobby Is Empty.", Toast.LENGTH_SHORT).show();
+                saveMatch();
             }
         });
         // Cancel button OnClick
@@ -117,6 +120,26 @@ public class CreateMatchFragment extends Fragment implements View.OnClickListene
             @Override
             public void onClick(View view) {
                 showDateDialog();
+            }
+        });
+        ((FloatingActionButton)v.findViewById(R.id.fabNavigate)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try
+                {
+                    // Launch Waze to look for Hawaii:
+                    String latitude = String.valueOf(position.latitude);
+                    String longitude = String.valueOf(position.longitude);
+                    String url = "https://waze.com/ul?ll="+latitude+","+longitude+"&navigate=yes";
+                    Intent intent = new Intent( Intent.ACTION_VIEW, Uri.parse( url ) );
+                    startActivity( intent );
+                }
+                catch ( ActivityNotFoundException ex  )
+                {
+                    // If Waze is not installed, open it in Google Play:
+                    Intent intent = new Intent( Intent.ACTION_VIEW, Uri.parse( "market://details?id=com.waze" ) );
+                    startActivity(intent);
+                }
             }
         });
         spinnerAdapter = new ArrayAdapter<String>(getContext()
@@ -190,10 +213,11 @@ public class CreateMatchFragment extends Fragment implements View.OnClickListene
         ((MainActivity)getActivity()).changeFragment(DashboardFragment.newInstance());
     }
 
-    public void setCourt(String courtName, String courtDescription, DocumentReference ref) {
+    public void setCourt(String courtName, String courtDescription, LatLng position, DocumentReference ref) {
         this.courtName = courtName;
         this.courtDescription = courtDescription;
         this.courtReference = ref;
+        this.position = position;
     }
 
     @Override

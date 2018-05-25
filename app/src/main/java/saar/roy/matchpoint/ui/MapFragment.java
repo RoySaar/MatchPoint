@@ -105,7 +105,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             public void onInfoWindowClick(Marker marker) {
                 final CreateMatchFragment matchDialogFragment = CreateMatchFragment
                         .newInstance();
-                matchDialogFragment.setCourt(marker.getTitle(), marker.getSnippet(),(DocumentReference)marker.getTag());
+                matchDialogFragment.setCourt(marker.getTitle(), marker.getSnippet(),marker.getPosition(),(DocumentReference)marker.getTag());
                 FragmentManager fm = getActivity().getSupportFragmentManager();
                 dialogHandler.show(getContext());
                 ((MainActivity)getActivity()).changeFragment(matchDialogFragment);
