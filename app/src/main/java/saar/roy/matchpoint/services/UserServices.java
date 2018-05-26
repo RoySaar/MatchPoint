@@ -2,6 +2,7 @@ package saar.roy.matchpoint.services;
 
 import android.support.annotation.NonNull;
 import android.telecom.Call;
+import android.util.Log;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -58,7 +59,6 @@ public class UserServices {
                 });
     }
 
-    //TODO: fix this (fetching matches, no names from participation)
     public void fetchUpcomingMatches(final Callback<ArrayList<Match>> callback) {
         if (FirebaseAuth.getInstance().getCurrentUser() == null) {
             throw new RuntimeException("No user is logged in");
@@ -78,16 +78,21 @@ public class UserServices {
                     for (DocumentChange matchSnapshot:documentSnapshots.getDocumentChanges()) {
                         if (matchSnapshot != null) {
                             DocumentSnapshot matchSnap = matchSnapshot.getDocument();
-                            matches.add(matchSnap.toObject(Match.class));
+                            Match match = matchSnap.toObject(Match.class);
+                            matches.add(match);
                         }
                     }
                     for (Match match:matches) {
+                        if(match.getOwner().getPath().equals(userReference.getPath()))
+                            returnMatches.add(match);
                         for (MatchParticipation participation:match.getParticipations()) {
-                            if (participation.getUser() == userReference){
+                            if (participation.getUser().getPath().equals(userReference.getPath())){
                                 returnMatches.add(match);
                             }
                         }
                     }
+                    Log.d("Return Matches",String.valueOf(returnMatches.size()));
+                    Log.d("Matches",String.valueOf(matches.size()));
                     callback.onCallback(returnMatches);
                 }
             }

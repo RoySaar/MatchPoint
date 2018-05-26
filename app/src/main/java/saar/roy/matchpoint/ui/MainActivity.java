@@ -88,8 +88,6 @@ public class MainActivity extends AppCompatActivity {
                                             public void onSuccess(DocumentSnapshot ownerSnapshot) {
                                                 NotificationCompat.Builder mBuilder =
                                                         new NotificationCompat.Builder(MainActivity.this)
-                                                                .setSmallIcon(R.mipmap.invitation)
-                                                                .setBadgeIconType(R.mipmap.invitation)
                                                                 .setLargeIcon(BitmapFactory.decodeResource(getResources(),R.drawable.pin_ico))
                                                                 .setContentTitle("Match Invite")
                                                                 .setContentText("From: " + ownerSnapshot.getString("name"))

@@ -14,12 +14,16 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 
 import saar.roy.matchpoint.data.Court;
 import saar.roy.matchpoint.data.Match;
@@ -64,37 +68,45 @@ public class MapServices {
     }
 
     public void getHours(final Callback<List<String>> callback, final Date date) {
-        final String opens= "0";
-        final String closes =  "24";
+        final int opens = 0;
+        final int closes =  23;
+        Calendar openDate = initializeDate(date, opens);
+        Calendar closeDate = initializeDate(date, closes);
         db.collection("matches")
-                .whereEqualTo("date",date)
+                .whereGreaterThanOrEqualTo("date",openDate.getTime())
+                .whereLessThanOrEqualTo("date",closeDate.getTime())
                 .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                .addOnCompleteListener(
+                        new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        ArrayList<Integer> hours = new ArrayList<>();
                         if (!task.getResult().isEmpty()) {
-                            ArrayList<String> hours = new ArrayList<>();
                             for (DocumentSnapshot document:task.getResult()) {
+                                Log.d("DateQuery","Arrived");
                                 Date time = document.getDate("date");
-                                hours.add(SimpleDateFormat
-                                        .getDateInstance(SimpleDateFormat.HOUR_OF_DAY0_FIELD).format(time));
+                                Calendar calendar = new GregorianCalendar(TimeZone.getDefault());
+                                calendar.setTime(time);
+                                hours.add(calendar.get(Calendar.HOUR_OF_DAY));
                             }
-                            ArrayList<String> available = new ArrayList<>();
-                            for (int i = Integer.parseInt(opens); i < Integer.parseInt(closes); i++) {
-                                if (!hours.contains(String.valueOf(i)))
-                                    available.add(String.valueOf(i));
-                            }
-                            callback.onCallback(available);
                         }
-                        else {
-                            ArrayList<String> available = new ArrayList<>();
-                            for (int i = Integer.parseInt(opens); i < Integer.parseInt(closes); i++) {
+                        ArrayList<String> available = new ArrayList<>();
+                        for (int i = opens; i <= closes; i++) {
+                            if (!hours.contains(i))
                                 available.add(String.valueOf(i));
-                            }
-                            callback.onCallback(available);
                         }
+                        callback.onCallback(available);
                     }
                 });
+    }
+
+    private static Calendar initializeDate(Date date, int hour) {
+        Calendar openDate = new GregorianCalendar(TimeZone.getDefault());
+        openDate.setTime(date);
+        openDate.set(Calendar.HOUR,hour);
+        openDate.set(Calendar.MINUTE,0);
+        openDate.set(Calendar.SECOND,0);
+        return openDate;
     }
 
     public void saveMatch(final Match match) {
