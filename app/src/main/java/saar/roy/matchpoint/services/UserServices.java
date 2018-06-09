@@ -18,6 +18,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -78,6 +79,7 @@ public class UserServices {
                     for (DocumentChange matchSnapshot:documentSnapshots.getDocumentChanges()) {
                         if (matchSnapshot != null) {
                             DocumentSnapshot matchSnap = matchSnapshot.getDocument();
+                            Log.d("DocumentSnapshot",((Date)matchSnap.get("date")).toString());
                             Match match = matchSnap.toObject(Match.class);
                             matches.add(match);
                         }

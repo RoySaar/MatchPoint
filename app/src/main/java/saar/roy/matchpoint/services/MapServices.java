@@ -9,6 +9,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.ServerValue;
+import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -67,12 +68,13 @@ public class MapServices {
                 });
     }
 
-    public void getHours(final Callback<List<String>> callback, final Date date) {
+    public void getHours(final Callback<List<String>> callback, DocumentReference court, final Date date) {
         final int opens = 0;
         final int closes =  23;
         Calendar openDate = initializeDate(date, opens);
         Calendar closeDate = initializeDate(date, closes);
         db.collection("matches")
+                .whereEqualTo("court",court)
                 .whereGreaterThanOrEqualTo("date",openDate.getTime())
                 .whereLessThanOrEqualTo("date",closeDate.getTime())
                 .get()

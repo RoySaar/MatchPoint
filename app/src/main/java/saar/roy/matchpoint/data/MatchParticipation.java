@@ -10,6 +10,10 @@ public class MatchParticipation {
     private DocumentReference user;
     private boolean confirmed;
 
+    public MatchParticipation(){
+
+    }
+
     public MatchParticipation(DocumentReference user) {
         this.user = user;
         this.confirmed = false;

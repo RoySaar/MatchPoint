@@ -164,7 +164,7 @@ public class CreateMatchFragment extends Fragment implements View.OnClickListene
                         updateSpinner(hours);
                     }
                 };
-                MapServices.getInstance().getHours(callback, matchDate.getTime());
+                MapServices.getInstance().getHours(callback, courtReference ,matchDate.getTime());
             }
         },matchDate.get(Calendar.YEAR), matchDate.get(Calendar.MONTH),matchDate.get(Calendar.DAY_OF_MONTH));
         datePickerDialog.show();
