@@ -14,17 +14,12 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import java.io.CharArrayReader;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TimeZone;
 
 import saar.roy.matchpoint.data.Court;
 import saar.roy.matchpoint.data.Match;
@@ -68,54 +63,38 @@ public class MapServices {
                 });
     }
 
-    public void getHours(final Callback<List<String>> callback,final Date date ,DocumentReference court,final String opens, final String closes) {
-        final int open = Integer.parseInt(opens);
-        final int close =  Integer.parseInt(closes);
-        Calendar openDate = initializeDate(date, open);
-        Calendar closeDate = initializeDate(date, close);
+    public void getHours(final Callback<List<String>> callback, final Date date) {
+        final String opens= "0";
+        final String closes =  "24";
         db.collection("matches")
-                .whereEqualTo("court",court)
-                .whereLessThanOrEqualTo("date",closeDate.getTime())
-                .whereGreaterThanOrEqualTo("date",openDate.getTime())
+                .whereEqualTo("date",date)
                 .get()
-                .addOnCompleteListener(
-                        new OnCompleteListener<QuerySnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                ArrayList<Integer> hours = new ArrayList<>();
-                                if (!task.getResult().isEmpty()) {
-                                    for (DocumentSnapshot document:task.getResult()) {
-                                        Log.d("DateQuery","Arrived");
-                                        Date time = document.getDate("date");
-                                        Calendar calendar = new GregorianCalendar(TimeZone.getDefault());
-                                        calendar.setTime(time);
-                                        hours.add(calendar.get(Calendar.HOUR_OF_DAY));
-                                        Log.d("Hour",String.valueOf(calendar.get(Calendar.HOUR_OF_DAY)));
-                                    }
-                                }
-                                else
-                                    Log.d("DateQuery","Empty");
-                                ArrayList<String> available = new ArrayList<>();
-                                for (int i = open; i <= close; i++) {
-                                    if (!hours.contains(i))
-                                        available.add(String.valueOf(i));
-                                }
-                                callback.onCallback(available);
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (!task.getResult().isEmpty()) {
+                            ArrayList<String> hours = new ArrayList<>();
+                            for (DocumentSnapshot document:task.getResult()) {
+                                Date time = document.getDate("date");
+                                hours.add(SimpleDateFormat
+                                        .getDateInstance(SimpleDateFormat.HOUR_OF_DAY0_FIELD).format(time));
                             }
-                        });
-    }
-
-    private static Calendar initializeDate(Date date, int hour) {
-        Calendar openDate = new GregorianCalendar(TimeZone.getDefault());
-        openDate.setTime(date);
-        openDate.set(Calendar.HOUR,hour);
-        openDate.set(Calendar.MINUTE,0);
-        openDate.set(Calendar.SECOND,0);
-        return openDate;
-    }
-
-    public String getTAG() {
-        return TAG;
+                            ArrayList<String> available = new ArrayList<>();
+                            for (int i = Integer.parseInt(opens); i < Integer.parseInt(closes); i++) {
+                                if (!hours.contains(String.valueOf(i)))
+                                    available.add(String.valueOf(i));
+                            }
+                            callback.onCallback(available);
+                        }
+                        else {
+                            ArrayList<String> available = new ArrayList<>();
+                            for (int i = Integer.parseInt(opens); i < Integer.parseInt(closes); i++) {
+                                available.add(String.valueOf(i));
+                            }
+                            callback.onCallback(available);
+                        }
+                    }
+                });
     }
 
     public void saveMatch(final Match match) {

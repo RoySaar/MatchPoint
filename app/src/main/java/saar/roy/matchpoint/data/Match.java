@@ -21,6 +21,10 @@ public class Match {
     private Date date;
     private DocumentReference owner;
 
+    public Match() {
+
+    }
+
     public Match(List<MatchParticipation> participations, DocumentReference court,Date date) {
         this.participations = participations;
         this.court = court;
