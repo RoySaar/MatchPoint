@@ -68,15 +68,15 @@ public class MapServices {
                 });
     }
 
-    public void getHours(final Callback<List<String>> callback, DocumentReference court, final Date date) {
-        final int opens = 0;
-        final int closes =  23;
-        Calendar openDate = initializeDate(date, opens);
-        Calendar closeDate = initializeDate(date, closes);
+    public void getHours(final Callback<List<String>> callback,final Date date ,DocumentReference court,final String opens, final String closes) {
+        final int open = Integer.parseInt(opens);
+        final int close =  Integer.parseInt(closes);
+        Calendar openDate = initializeDate(date, open);
+        Calendar closeDate = initializeDate(date, close);
         db.collection("matches")
                 .whereEqualTo("court",court)
-                .whereGreaterThanOrEqualTo("date",openDate.getTime())
                 .whereLessThanOrEqualTo("date",closeDate.getTime())
+                .whereGreaterThanOrEqualTo("date",openDate.getTime())
                 .get()
                 .addOnCompleteListener(
                         new OnCompleteListener<QuerySnapshot>() {
@@ -90,10 +90,13 @@ public class MapServices {
                                         Calendar calendar = new GregorianCalendar(TimeZone.getDefault());
                                         calendar.setTime(time);
                                         hours.add(calendar.get(Calendar.HOUR_OF_DAY));
+                                        Log.d("Hour",String.valueOf(calendar.get(Calendar.HOUR_OF_DAY)));
                                     }
                                 }
+                                else
+                                    Log.d("DateQuery","Empty");
                                 ArrayList<String> available = new ArrayList<>();
-                                for (int i = opens; i <= closes; i++) {
+                                for (int i = open; i <= close; i++) {
                                     if (!hours.contains(i))
                                         available.add(String.valueOf(i));
                                 }

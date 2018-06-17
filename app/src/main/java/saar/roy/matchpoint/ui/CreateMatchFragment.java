@@ -142,7 +142,7 @@ public class CreateMatchFragment extends Fragment implements View.OnClickListene
         });
         spinnerAdapter = new ArrayAdapter<String>(getContext()
                 ,android.R.layout.simple_list_item_1,new ArrayList<String>());
-        spinnerAdapter.add("12:00");
+        spinnerAdapter.add("00");
         Spinner spinner = v.findViewById(R.id.spnrMatchTime);
         spinner.setAdapter(spinnerAdapter);
         ((AppCompatActivity)getActivity()).getSupportActionBar().hide();
@@ -155,6 +155,8 @@ public class CreateMatchFragment extends Fragment implements View.OnClickListene
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
                 matchDate.set(year,month,day);
                 Date now = GregorianCalendar.getInstance(TimeZone.getDefault()).getTime();
+                String opens = courtDescription.substring(0,2);
+                String closes = courtDescription.substring(6,8);
                 if (now.after(matchDate.getTime())) {
                     Toast.makeText(getContext(),"Cannot select past date",Toast.LENGTH_SHORT).show();
                     ((TextView)getView().findViewById(R.id.tvMatchDate))
@@ -165,7 +167,7 @@ public class CreateMatchFragment extends Fragment implements View.OnClickListene
                             updateSpinner(hours);
                         }
                     };
-                    MapServices.getInstance().getHours(callback, courtReference, now);
+                    MapServices.getInstance().getHours(callback,now,courtReference,opens,closes);
                 }
                 else {
                     TextView tvMatchDialog = getView().findViewById(R.id.tvMatchDate);
@@ -176,7 +178,7 @@ public class CreateMatchFragment extends Fragment implements View.OnClickListene
                             updateSpinner(hours);
                         }
                     };
-                    MapServices.getInstance().getHours(callback, courtReference, matchDate.getTime());
+                    MapServices.getInstance().getHours(callback,matchDate.getTime(),courtReference,opens,closes);
                 }
             }
         },matchDate.get(Calendar.YEAR), matchDate.get(Calendar.MONTH),matchDate.get(Calendar.DAY_OF_MONTH));
@@ -211,18 +213,23 @@ public class CreateMatchFragment extends Fragment implements View.OnClickListene
 
     public void saveMatch() {
         Spinner spinner = getView().findViewById(R.id.spnrMatchTime);
-        matchDate.set(Calendar.HOUR_OF_DAY, Integer.parseInt((String) spinner.getSelectedItem()));
-        matchDate.set(Calendar.MINUTE,0);
-        matchDate.set(Calendar.SECOND,0);
-        matchDate.set(Calendar.MILLISECOND,0);
-        MapServices.getInstance().saveMatch(
-                new Match(participationAdapter.getParticipations(),
-                        courtReference,matchDate.getTime())
-        );
-        BottomNavigationView bottomNavigationView;
-        bottomNavigationView = getActivity().findViewById(R.id.navigation);
-        bottomNavigationView.setSelectedItemId(R.id.navigation_dashboard);
-        ((MainActivity)getActivity()).changeFragment(DashboardFragment.newInstance());
+        if (spinner.getSelectedItem().equals("00")) {
+            Toast.makeText(getContext(),"Please choose a valid date and hour",Toast.LENGTH_SHORT).show();
+        }
+        else {
+            matchDate.set(Calendar.HOUR_OF_DAY, Integer.parseInt((String) spinner.getSelectedItem()));
+            matchDate.set(Calendar.MINUTE, 0);
+            matchDate.set(Calendar.SECOND, 0);
+            matchDate.set(Calendar.MILLISECOND, 0);
+            MapServices.getInstance().saveMatch(
+                    new Match(participationAdapter.getParticipations(),
+                            courtReference, matchDate.getTime())
+            );
+            BottomNavigationView bottomNavigationView;
+            bottomNavigationView = getActivity().findViewById(R.id.navigation);
+            bottomNavigationView.setSelectedItemId(R.id.navigation_dashboard);
+            ((MainActivity) getActivity()).changeFragment(DashboardFragment.newInstance());
+        }
     }
 
     public void setCourt(String courtName, String courtDescription, LatLng position, DocumentReference ref) {
