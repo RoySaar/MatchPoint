@@ -107,7 +107,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                         .newInstance();
                 matchDialogFragment.setCourt(marker.getTitle(), marker.getSnippet(),marker.getPosition(),(DocumentReference)marker.getTag());
                 FragmentManager fm = getActivity().getSupportFragmentManager();
-                dialogHandler.show(getContext());
                 ((MainActivity)getActivity()).changeFragment(matchDialogFragment);
             }
         });
@@ -125,9 +124,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onResume() {
         mapView.onResume();
-        dialogHandler = SpotsDialogHandler.getInstance();
-      //  if (dialogHandler.isShowing())
-      //      dialogHandler.hide();
         super.onResume();
     }
     @Override

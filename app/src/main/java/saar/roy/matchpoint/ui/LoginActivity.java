@@ -177,7 +177,6 @@ public class LoginActivity extends AppCompatActivity {
                                 Toast.makeText(LoginActivity.this, R.string.auth_failed,
                                         Toast.LENGTH_SHORT).show();
                             } else {
-                                //dialogHandler.show(LoginActivity.this, R.style.LoginDialog);
                                 UserServices.getInstance().fetchCurrentUser();
                                 startActivity(new Intent(LoginActivity.this, MainActivity.class));
                                 finish();
@@ -207,7 +206,6 @@ public class LoginActivity extends AppCompatActivity {
                                 Toast.makeText(LoginActivity.this, R.string.auth_failed,
                                         Toast.LENGTH_SHORT).show();
                             } else {
-                                // TODO: Finish the signup (login and such)
                                 Toast.makeText(LoginActivity.this, "Sign up successful", Toast.LENGTH_SHORT).show();
                                 Callback<Void> callback = new Callback<Void>() {
                                     @Override
@@ -231,8 +229,18 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     @Override
+    public void onDestroy() {
+        //FirebaseAuth.getInstance().signOut();
+        super.onDestroy();
+    }
+
+    @Override
     public void onStart() {
         super.onStart();
+        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+            UserServices.getInstance().fetchCurrentUser();
+            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+        }
         mAuth.addAuthStateListener(mAuthListener);
     }
 

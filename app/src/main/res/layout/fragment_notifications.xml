@@ -1,22 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:layoutDirection="rtl"
+    android:orientation="vertical"
+    android:textDirection="rtl">
+
+
+    <TextView
+        android:id="@+id/tvAddFriendsTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:layout_margin="8dp"
+        android:fontFamily="@font/assistant_bold"
+        android:layoutDirection="rtl"
+        android:text="חפש אנשים"
+        android:textColor="@color/textOnP"
+        android:textDirection="rtl"
+        android:textSize="36sp" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="8dp"
+        android:layoutDirection="rtl"
+        android:orientation="horizontal"
+        android:textDirection="rtl">
+
+        <EditText
+            android:id="@+id/etSearchFriends"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:fontFamily="@font/assistant"
+            android:hint="שם"
+            android:inputType="textPersonName"
+            android:layoutDirection="rtl"
+            android:textDirection="rtl" />
+
+        <Button
+            android:id="@+id/btnSearchFriends"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:backgroundTint="@color/colorPrimary"
+            android:fontFamily="@font/assistant_semibold"
+            android:text="חפש" />
+
+    </LinearLayout>
 
     <ListView
-        android:id="@+id/lvNotifications"
-        android:layout_width="match_parent"
-        android:layout_height="526dp"
+        android:id="@+id/lvFriendsResult"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start"
         android:layout_margin="8dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-</android.support.constraint.ConstraintLayout>
+        android:layoutDirection="rtl"
+        android:textDirection="rtl" />
+
+</LinearLayout>

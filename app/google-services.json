@@ -15,12 +15,24 @@
       },
       "oauth_client": [
         {
+          "client_id": "1066274588986-9o55v1gl9ut7hq9e7ceggc9mmpvper1p.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "saar.roy.matchpoint",
+            "certificate_hash": "c80314f0fc46779bd8163cb4c5f90c5d2a8a7207"
+          }
+        },
+        {
           "client_id": "1066274588986-11ek18n95k7cv5ug40immvdf7v164hmn.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "saar.roy.matchpoint",
             "certificate_hash": "8fcb52347ae0e225549666dae8c3c092bd679510"
           }
+        },
+        {
+          "client_id": "1066274588986-foc8nqs664i6v0cu8c7ch16gv4jpm8mq.apps.googleusercontent.com",
+          "client_type": 3
         },
         {
           "client_id": "1066274588986-foc8nqs664i6v0cu8c7ch16gv4jpm8mq.apps.googleusercontent.com",

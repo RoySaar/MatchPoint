@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
                     setTitle(R.string.title_dashboard);
                     break;
                 case R.id.navigation_notifications:
-                    selectedFragment = NotificationsFragment.newInstance();
+                    selectedFragment = AddFriendsFragment.newInstance();
                     setTitle(R.string.title_notifications);
                     break;
             }
@@ -88,6 +88,8 @@ public class MainActivity extends AppCompatActivity {
                                             public void onSuccess(DocumentSnapshot ownerSnapshot) {
                                                 NotificationCompat.Builder mBuilder =
                                                         new NotificationCompat.Builder(MainActivity.this)
+                                                                .setSmallIcon(R.mipmap.invitation)
+                                                                .setBadgeIconType(R.mipmap.invitation)
                                                                 .setLargeIcon(BitmapFactory.decodeResource(getResources(),R.drawable.pin_ico))
                                                                 .setContentTitle("Match Invite")
                                                                 .setContentText("From: " + ownerSnapshot.getString("name"))

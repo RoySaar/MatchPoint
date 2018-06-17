@@ -77,7 +77,6 @@ public class CreateMatchFragment extends Fragment implements View.OnClickListene
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container
             , Bundle savedInstanceState) {
-        //dialogHandler.hide();
         final View v = inflater.inflate(R.layout.dialog_create_match, null);
         ArrayList<MatchParticipation> list = new ArrayList<>();
         participationAdapter = new ParticipationAdapter(getContext(), list);
@@ -96,7 +95,6 @@ public class CreateMatchFragment extends Fragment implements View.OnClickListene
         v.<Button>findViewById(R.id.cancelBtn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                dialogHandler.show(getContext());
                 ((MainActivity)getActivity()).changeFragment(MapFragment.newInstance());
             }
         });
@@ -156,15 +154,30 @@ public class CreateMatchFragment extends Fragment implements View.OnClickListene
             @Override
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
                 matchDate.set(year,month,day);
-                TextView tvMatchDialog = getView().findViewById(R.id.tvMatchDate);
-                tvMatchDialog.setText(SimpleDateFormat.getDateInstance(SimpleDateFormat.FULL).format(matchDate.getTime()));
-                Callback<List<String>> callback = new Callback<List<String>>() {
-                    @Override
-                    public void onCallback(List<String> hours) {
-                        updateSpinner(hours);
-                    }
-                };
-                MapServices.getInstance().getHours(callback, courtReference ,matchDate.getTime());
+                Date now = GregorianCalendar.getInstance(TimeZone.getDefault()).getTime();
+                if (now.after(matchDate.getTime())) {
+                    Toast.makeText(getContext(),"Cannot select past date",Toast.LENGTH_SHORT).show();
+                    ((TextView)getView().findViewById(R.id.tvMatchDate))
+                            .setText(SimpleDateFormat.getDateInstance(SimpleDateFormat.FULL).format(now));
+                    Callback<List<String>> callback = new Callback<List<String>>() {
+                        @Override
+                        public void onCallback(List<String> hours) {
+                            updateSpinner(hours);
+                        }
+                    };
+                    MapServices.getInstance().getHours(callback, courtReference, now);
+                }
+                else {
+                    TextView tvMatchDialog = getView().findViewById(R.id.tvMatchDate);
+                    tvMatchDialog.setText(SimpleDateFormat.getDateInstance(SimpleDateFormat.FULL).format(matchDate.getTime()));
+                    Callback<List<String>> callback = new Callback<List<String>>() {
+                        @Override
+                        public void onCallback(List<String> hours) {
+                            updateSpinner(hours);
+                        }
+                    };
+                    MapServices.getInstance().getHours(callback, courtReference, matchDate.getTime());
+                }
             }
         },matchDate.get(Calendar.YEAR), matchDate.get(Calendar.MONTH),matchDate.get(Calendar.DAY_OF_MONTH));
         datePickerDialog.show();
@@ -206,7 +219,6 @@ public class CreateMatchFragment extends Fragment implements View.OnClickListene
                 new Match(participationAdapter.getParticipations(),
                         courtReference,matchDate.getTime())
         );
-        dialogHandler.show(getContext());
         BottomNavigationView bottomNavigationView;
         bottomNavigationView = getActivity().findViewById(R.id.navigation);
         bottomNavigationView.setSelectedItemId(R.id.navigation_dashboard);

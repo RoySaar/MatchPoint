@@ -20,7 +20,6 @@ public class Court {
     private GeoPoint position;
     private String name;
     private String description;
-    private double price;
 
     public Court() {
     }
@@ -39,14 +38,11 @@ public class Court {
         return description;
     }
 
-    public double getPrice() { return price; }
-
     public MarkerOptions toMarkerOptions(Bitmap smallMarker) {
         return new MarkerOptions()
                 .position(getPositionAsLatLng())
                 .icon(BitmapDescriptorFactory.fromBitmap(smallMarker))
                 .title(getName())
-                .snippet(getDescription() + " - " + getPrice() + "₪");
+                .snippet(getDescription());
     }
-
 }

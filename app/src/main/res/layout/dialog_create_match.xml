@@ -45,11 +45,12 @@
         android:layout_margin="8dp"
         android:clickable="true"
         android:focusable="true"
+        android:tint="@color/textOnS"
         app:backgroundTint="@color/colorPrimary"
         app:fabSize="normal"
         app:layout_anchor="@+id/appbar"
         app:layout_anchorGravity="left|bottom"
-        app:srcCompat="@drawable/ic_action_name" />
+        app:srcCompat="@drawable/navigate" />
 
     <android.support.v4.widget.NestedScrollView
         android:id="@+id/nestedScrollView"

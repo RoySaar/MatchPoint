@@ -23,5 +23,5 @@ public class NotificationServices {
 
     public void addNotification(Notification notification) {
         notifications.add(notification);
-    }public int yes()
+    }
 }

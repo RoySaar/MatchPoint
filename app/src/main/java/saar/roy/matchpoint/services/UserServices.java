@@ -54,8 +54,10 @@ public class UserServices {
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        final User user = task.getResult().toObject(User.class);
-                        currentUser = user;
+                        if (task.isSuccessful()) {
+                            final User user = task.getResult().toObject(User.class);
+                            currentUser = user;
+                        }
                     }
                 });
     }
@@ -101,20 +103,26 @@ public class UserServices {
         });
     }
 
-    public void addFriend(Callback<Void> callback, final String name) {
+    public boolean alreadyFriend(final String name) {
+        return getCurrentUser().getFriendNames().contains(name);
+    }
 
-        db.collection("user").whereEqualTo("name",name).get()
+    public void addFriend(final Callback<Void> callback, final String name) {
+        db.collection("users").whereEqualTo("name",name).get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot documentSnapshots) {
                         DocumentReference friendRef = documentSnapshots.getDocuments().get(0).getReference();
                         HashMap<String ,DocumentReference> friends = getCurrentUser().getFriends();
                         friends.put(name,friendRef);
-                        HashMap<String,HashMap<String,DocumentReference>> update = new HashMap<>();
-                        update.put("friends",friends);
+                        db.collection("users").document(FirebaseAuth.getInstance().getUid()).update("friends",friends).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                callback.onCallback(aVoid);
+                            }
+                        });
                     }
                 });
-
     }
 
     public void findUsersByName(final Callback<List<User>> callback, final String name) {
@@ -135,6 +143,8 @@ public class UserServices {
             }
         });
     }
+
+
 
     public void createUserInDatabase(final Callback callback, String uid,String name) {
         db.collection("users").document(uid).set(new User(name)).addOnSuccessListener(new OnSuccessListener<Void>() {

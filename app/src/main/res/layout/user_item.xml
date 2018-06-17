@@ -10,11 +10,13 @@
 
     <TextView
         android:id="@+id/tvSearchName"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:layout_margin="8dp"
         android:layout_marginStart="10dp"
         android:layout_weight="1"
-        android:fontFamily="@font/assistant_semibold"
+        android:focusable="false"
         android:text="@string/name_placeholder"
         android:textColor="@color/textOnP"
         android:textSize="18sp" />

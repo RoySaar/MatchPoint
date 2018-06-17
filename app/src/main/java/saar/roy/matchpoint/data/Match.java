@@ -32,6 +32,7 @@ public class Match {
         this.owner = UserServices.getInstance().getCurrentUserReference();
     }
 
+
     public DocumentReference getCourt() {
         return court;
     }
@@ -47,4 +48,21 @@ public class Match {
     public List<MatchParticipation> getParticipations() {
         return participations;
     }
+
+    public void setParticipations(List<MatchParticipation> participations) {
+        this.participations = participations;
+    }
+
+    public void setCourt(DocumentReference court) {
+        this.court = court;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    public void setOwner(DocumentReference owner) {
+        this.owner = owner;
+    }
+
 }

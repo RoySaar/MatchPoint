@@ -34,6 +34,7 @@
     <string name="cancel">בטל</string>
     <string name="order">הזמן</string>
     <string name="court_image">Court Image</string>
+    <string name="name_placeholder">שם כלשהו</string>
 
     <!-- String related to map -->
     <string name="search_courts">חפש מגרשים</string>
@@ -43,16 +44,19 @@
     <string name="friends">חברים</string>
     <string name="username_placeholder">שם משתמש</string>
     <string name="user_info_placeholder">Jan 1, 1970</string>
+    <string name="member_since">רשום מאז</string>
+    <string name="profile_picture">Profile Picture</string>
 
     <!-- Activity titles -->
     <string name="title_activity_main">Map</string>
     <string name="title_home">Home</string>
     <string name="title_map">Map</string>
     <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
-    <string name="profile_picture">Profile Picture</string>
-    <string name="name_placeholder">שם כלשהו</string>
-    <string name="member_since">רשום מאז</string>
+    <string name="title_notifications">Friends</string>
+
+
+
+
 
 
 </resources>
