@@ -155,9 +155,17 @@ public class CreateMatchFragment extends Fragment implements View.OnClickListene
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
                 matchDate.set(year,month,day);
                 Date now = GregorianCalendar.getInstance(TimeZone.getDefault()).getTime();
-                String opens = courtDescription.substring(0,2);
-                String closes = courtDescription.substring(6,8);
-                if (now.after(matchDate.getTime())) {
+                String open = courtDescription.substring(0,2);
+                int opens = Integer.parseInt(open);
+                if (now.getHours() + 1 > opens) {
+                    opens = now.getHours() +1;
+                }
+                String close = courtDescription.substring(6,8);
+                int closes = Integer.parseInt(close);
+                if (now.getHours() + 1 >= closes) {
+                    Toast.makeText(getContext(),"Cannot Order For Today Anymore",Toast.LENGTH_SHORT).show();
+                }
+                else if (now.after(matchDate.getTime())) {
                     Toast.makeText(getContext(),"Cannot select past date",Toast.LENGTH_SHORT).show();
                     ((TextView)getView().findViewById(R.id.tvMatchDate))
                             .setText(SimpleDateFormat.getDateInstance(SimpleDateFormat.FULL).format(now));
@@ -221,6 +229,7 @@ public class CreateMatchFragment extends Fragment implements View.OnClickListene
             matchDate.set(Calendar.MINUTE, 0);
             matchDate.set(Calendar.SECOND, 0);
             matchDate.set(Calendar.MILLISECOND, 0);
+            Date now = GregorianCalendar.getInstance(TimeZone.getDefault()).getTime();
             MapServices.getInstance().saveMatch(
                     new Match(participationAdapter.getParticipations(),
                             courtReference, matchDate.getTime())

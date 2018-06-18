@@ -68,11 +68,11 @@ public class MapServices {
                 });
     }
 
-    public void getHours(final Callback<List<String>> callback,final Date date ,DocumentReference court,final String opens, final String closes) {
-        final int open = Integer.parseInt(opens);
-        final int close =  Integer.parseInt(closes);
-        Calendar openDate = initializeDate(date, open);
-        Calendar closeDate = initializeDate(date, close);
+    public void getHours(final Callback<List<String>> callback,final Date date ,DocumentReference court,final int opens, final int closes) {
+        //final int open = Integer.parseInt(opens);
+        //final int close =  Integer.parseInt(closes);
+        Calendar openDate = initializeDate(date, opens);
+        Calendar closeDate = initializeDate(date, closes);
         db.collection("matches")
                 .whereEqualTo("court",court)
                 .whereLessThanOrEqualTo("date",closeDate.getTime())
@@ -96,7 +96,7 @@ public class MapServices {
                                 else
                                     Log.d("DateQuery","Empty");
                                 ArrayList<String> available = new ArrayList<>();
-                                for (int i = open; i <= close; i++) {
+                                for (int i = opens; i <= closes; i++) {
                                     if (!hours.contains(i))
                                         available.add(String.valueOf(i));
                                 }
