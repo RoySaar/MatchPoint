@@ -11,17 +11,6 @@
         android:layout_height="match_parent"
         android:layout_weight="1">
 
-        <ImageView
-            android:id="@+id/ivConfirmed"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_marginEnd="36dp"
-            android:layout_marginTop="4dp"
-            android:layout_weight="1"
-            android:src="@drawable/unconfirmed"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
         <TextView
             android:id="@+id/tvParticipaitonName"
             android:layout_width="wrap_content"

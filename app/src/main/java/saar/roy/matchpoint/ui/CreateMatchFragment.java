@@ -196,7 +196,7 @@ public class CreateMatchFragment extends Fragment implements View.OnClickListene
     @Override
     public void onClick(View view) {
         String name = ((AutoCompleteTextView) getView().findViewById(R.id.actvSearchFriends))
-                .getText().toString();
+                .getText().toString().trim();
         DocumentReference ref = UserServices.getInstance().getCurrentUser().getUserByName(name);
         MatchParticipation mp = new MatchParticipation(ref);
         if (participationAdapter.getCount() < 4) {
@@ -225,6 +225,8 @@ public class CreateMatchFragment extends Fragment implements View.OnClickListene
             Toast.makeText(getContext(),"Please choose a valid date and hour",Toast.LENGTH_SHORT).show();
         }
         else {
+
+            // Create new date and save a match with that date
             matchDate.set(Calendar.HOUR_OF_DAY, Integer.parseInt((String) spinner.getSelectedItem()));
             matchDate.set(Calendar.MINUTE, 0);
             matchDate.set(Calendar.SECOND, 0);
@@ -234,10 +236,12 @@ public class CreateMatchFragment extends Fragment implements View.OnClickListene
                     new Match(participationAdapter.getParticipations(),
                             courtReference, matchDate.getTime())
             );
+            // Change Fragment
             BottomNavigationView bottomNavigationView;
             bottomNavigationView = getActivity().findViewById(R.id.navigation);
             bottomNavigationView.setSelectedItemId(R.id.navigation_dashboard);
             ((MainActivity) getActivity()).changeFragment(DashboardFragment.newInstance());
+
         }
     }
 

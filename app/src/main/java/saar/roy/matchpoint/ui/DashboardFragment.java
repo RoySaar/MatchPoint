@@ -22,6 +22,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentSnapshot;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,6 +34,7 @@ import java.util.Map;
 import javax.xml.datatype.Duration;
 
 import saar.roy.matchpoint.R;
+import saar.roy.matchpoint.data.Court;
 import saar.roy.matchpoint.data.Match;
 import saar.roy.matchpoint.data.MatchParticipation;
 import saar.roy.matchpoint.data.User;
@@ -87,18 +91,21 @@ public class DashboardFragment extends Fragment implements View.OnClickListener 
         titleMap = new HashMap<>();
         Callback<ArrayList<Match>> callback = new Callback<ArrayList<Match>>() {
             @Override
-            public void onCallback(ArrayList<Match> matches) {
+            public void onCallback(final ArrayList<Match> matches) {
                 if (matches == null) {
                     Snackbar.make(getView().findViewById(R.id.elvMatches),"No Upcoming Matches.",Snackbar.LENGTH_SHORT).show();
                 }
                 else {
-                    for (Match match:matches) {
+                    for (final Match match:matches) {
                         headerList.add(SimpleDateFormat.getDateTimeInstance().format(match.getDate()));
-                        ArrayList<String> participationsList = new ArrayList<>();
-                        for (MatchParticipation participation:match.getParticipations()) {
-                            participationsList.add(String.valueOf(participation.isConfirmed()));
-                        }
-                        titleMap.put(headerList.get(matches.indexOf(match)),participationsList);
+                        match.getCourt().get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                            @Override
+                            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                ArrayList<String> list = new ArrayList<>();
+                                list.add(documentSnapshot.toObject(Court.class).getName());
+                                titleMap.put(headerList.get(matches.indexOf(match)),list);
+                            }
+                        });
                     }
                     MatchListAdapter matchAdapter = new MatchListAdapter(getContext(),headerList,titleMap);
                     ((ExpandableListView)getView().findViewById(R.id.elvMatches)).setAdapter(matchAdapter);

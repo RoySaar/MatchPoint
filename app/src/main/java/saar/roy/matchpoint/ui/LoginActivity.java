@@ -230,17 +230,12 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     public void onDestroy() {
-        //FirebaseAuth.getInstance().signOut();
         super.onDestroy();
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
-            UserServices.getInstance().fetchCurrentUser();
-            startActivity(new Intent(LoginActivity.this, MainActivity.class));
-        }
         mAuth.addAuthStateListener(mAuthListener);
     }
 

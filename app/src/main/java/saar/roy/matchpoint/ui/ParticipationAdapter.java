@@ -53,17 +53,17 @@ public class ParticipationAdapter extends ArrayAdapter<MatchParticipation> {
                     .inflate(R.layout.participation_item, parent, false);
         }
         final TextView tvName = convertView.findViewById(R.id.tvParticipaitonName);
-        ImageView ivConfirmed = convertView.findViewById(R.id.ivConfirmed);
+        //ImageView ivConfirmed = convertView.findViewById(R.id.ivConfirmed);
         participation.getUser().get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 tvName.setText(documentSnapshot.getString("name"));
             }
         });
-        if (participation.isConfirmed())
-            ivConfirmed.setImageResource(R.drawable.confirmed);
-        else
-            ivConfirmed.setImageResource(R.drawable.unconfirmed);
+       // if (participation.isConfirmed())
+       //     ivConfirmed.setImageResource(R.drawable.confirmed);
+       // else
+       //     ivConfirmed.setImageResource(R.drawable.unconfirmed);
         final Typeface tvFont = Typeface.createFromAsset(assetManager, "fonts/assistant_semibold.ttf");
         tvName.setTypeface(tvFont);
         return convertView;
